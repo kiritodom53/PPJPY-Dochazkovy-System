@@ -19,7 +19,10 @@ class Example(Frame):
         print("btnUpdateEvent")
         print(self.user_id)
         self.clear()
-        p_rows = db.select_presence_by_user_id(self.conn, self.user_id)
+        year = self.get_year()
+        month = self.get_month()
+        print("mm: " + str(month))
+        p_rows = db.select_presence_by_user_id(self.conn, self.user_id, year, month)
         for x in p_rows:
             print(x)
             self.lb.insert(END, x)
@@ -27,9 +30,16 @@ class Example(Frame):
     def clear(self):
         self.lb.delete(0, END)
 
+    def get_year(self):
+        return self.cbYear.get()
+
+    def get_month(self):
+        return self.cbMonth.get()
 
     def cb_month_update(self, event):
-        print(self.cbMonth.get())
+        temp = self.cbMonth.get()
+        print(temp)
+        return "2019"
 
     def initUI(self):
         #self.master.title("Docházkový systém")
@@ -68,9 +78,9 @@ class Example(Frame):
         lblYear = Label(self, text="Rok:")
         lblYear.grid(row=2, column=0, sticky=W, pady=4, padx=5)
 
-        cbYear = Combobox(self, state="readonly", values=user_years)
-        cbYear.set(user_years[0])
-        cbYear.grid(row=2, column=1, sticky=W, pady=2, padx=50)
+        self.cbYear = Combobox(self, state="readonly", values=user_years)
+        self.cbYear.set(user_years[0])
+        self.cbYear.grid(row=2, column=1, sticky=W, pady=2, padx=50)
 
         # area = Text(self)
         # area.grid(row=3, column=0, columnspan=2, rowspan=4,

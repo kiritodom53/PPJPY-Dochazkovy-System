@@ -1,5 +1,6 @@
 import sqlite3
 from sqlite3 import Error
+import Version.v01.Validation.Helper as helper
 
 conn = None
 db_file = r"C:\Users\dom53\Documents\_workspace\____new_project_here\_python-project\DochazkovySystem\_files\dochazkadb.db"
@@ -109,10 +110,17 @@ def select_user_by_id(conn, id):
     # print(row)
     return row
 
-def select_presence_by_user_id(conn, id):
+def select_presence_by_user_id(conn, id, date, month):
 
     cur = conn.cursor()
-    cur.execute("SELECT * FROM presence WHERE userId=?", (id,))
+    print("iid: " + str(id))
+    print("ddate: " + date)
+    print("mmonth: " + month)
+    convert_month = helper.Validation.month_to_number(month)
+    print(convert_month)
+    mesic = date+'-'+convert_month+'%'
+    print(mesic)
+    cur.execute("SELECT * FROM presence WHERE userId= ? AND date LIKE ?", (id, date+'-'+convert_month+'%',))
 
     rows = cur.fetchall()
     # print(row)
