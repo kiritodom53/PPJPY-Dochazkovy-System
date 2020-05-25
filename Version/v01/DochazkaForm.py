@@ -1,6 +1,9 @@
 from tkinter import Tk, Text, BOTH, W, N, E, S, LEFT, END, Listbox, LabelFrame, Radiobutton, IntVar, Toplevel
 from tkinter.ttk import Frame, Button, Label, Style, Combobox
 import Version.v01.Database as db
+import Version.v01.Validation.Helper as helper
+from datetime import datetime
+import time
 
 
 # Tk, Text, BOTH, W, N, E, S, Listbox, LabelFrame, Radiobutton, IntVar
@@ -9,7 +12,7 @@ class Example(Frame):
     def __init__(self, usr, userId):
         super().__init__()
         u = usr
-        self.lb = Listbox(self)
+        self.lbData = Listbox(self)
         self.conn = db.create_connection()
         self.user_id = userId
         self.userLogIn = "Přihlášen: " + usr
@@ -23,12 +26,21 @@ class Example(Frame):
         month = self.get_month()
         print("mm: " + str(month))
         p_rows = db.select_presence_by_user_id(self.conn, self.user_id, year, month)
+        format = '%H:%M'
+        # print
+        # datetime.strptime(time2, format) -
+        # datetime.strptime(time1, format)
         for x in p_rows:
-            print(x)
-            self.lb.insert(END, x)
+            print(datetime.strptime(helper.Validation.time_covert(x[2]), format) - datetime.strptime(helper.Validation.time_covert(x[1]), format))
+            vstup = helper.Validation.date_convert(x[3]) + \
+                    " :: " \
+                    + helper.Validation.time_covert(x[1]) \
+                    + " - " \
+                    + helper.Validation.time_covert(x[2])
+            self.lbData.insert(END, vstup)
 
     def clear(self):
-        self.lb.delete(0, END)
+        self.lbData.delete(0, END)
 
     def get_year(self):
         return self.cbYear.get()
@@ -82,6 +94,9 @@ class Example(Frame):
         self.cbYear.set(user_years[0])
         self.cbYear.grid(row=2, column=1, sticky=W, pady=2, padx=50)
 
+        # lblYear = Label(self, text="Formát:")
+        # lblYear.grid(row=3, column=0, sticky=W, pady=4, padx=5)
+
         # area = Text(self)
         # area.grid(row=3, column=0, columnspan=2, rowspan=4,
         #    padx=5, sticky=E+W+S+N)
@@ -89,7 +104,8 @@ class Example(Frame):
 
         # for item in [u"jedna", u"dva", u"tři", u"čtyři"]:
         #     lb.insert(END, item)
-        self.lb.grid(row=3, column=0, columnspan=4, rowspan=1,
+
+        self.lbData.grid(row=3, column=0, columnspan=4, rowspan=1,
                 padx=5, sticky=E + W + S + N)
 
         lblUser = Label(self, text=self.userLogIn)

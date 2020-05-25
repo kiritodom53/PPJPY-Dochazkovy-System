@@ -161,6 +161,20 @@ def update_user(conn, task):
     cur.execute(sql, task)
     conn.commit()
 
+def update_presence(conn, task):
+    """
+    update priority, begin_date, and end date of a task
+    :param conn:
+    :param task:
+    :return: project id
+    """
+    sql = ''' UPDATE presence
+              SET timeIn = ?, timeOut = ?
+              WHERE userId = ? AND id = ?'''
+    cur = conn.cursor()
+    cur.execute(sql, task)
+    conn.commit()
+
 def create_user(conn, project):
     """
     Create a new project into the projects table
