@@ -15,6 +15,7 @@ login_page = lg.Login_Page()# I dont need to pass the root now since its initial
 login_page.mainloop_window()  # Just mainlooping the authentication window
 userId = login_page.get_user()
 qq = login_page.get_user_name()
+nastup = login_page.get_hire_date()
 
 print("testloginform")
 print(userId)
@@ -26,8 +27,8 @@ class Main_Win:
     def __init__(self, main_win=Tk()):  # This is my first change so i already initialize a Tk window inside the class
         self.main_win = main_win
         main_win.title("Docházkový systém MANDINEC - " + qq)
-        main_win.geometry("500x500")
-        app = td.Example(qq,userId)
+        main_win.geometry("560x500")
+        app = td.Example(qq, userId, nastup)
         #main_win.geometry("900x500+250+130")
 
 

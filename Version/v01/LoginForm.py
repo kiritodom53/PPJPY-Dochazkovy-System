@@ -7,6 +7,7 @@ import Version.v01.Database as db
 
 qq = None
 userId = None
+hire = None
 
 class Login_Page:
     uu = ""
@@ -89,8 +90,10 @@ class Login_Page:
         print("row[2]: " + row[2])
         global qq
         global userId
+        global hire
         qq = row[3] + " " + row[4]
         userId = row[0]
+        hire = row[5]
 
         if name == row[1] and password == row[2]:
             #Main_Win.setUzv(uu)
@@ -109,6 +112,9 @@ class Login_Page:
 
     def get_user_name(self):
         return qq
+
+    def get_hire_date(self):
+        return hire
 
     def exit_login(self):
         msg = messagebox.askyesno("Exit login page", "Do you really want to exit?")

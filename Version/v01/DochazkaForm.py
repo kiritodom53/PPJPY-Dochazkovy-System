@@ -1,4 +1,4 @@
-from tkinter import Tk, Text, BOTH, W, N, E, S, LEFT, END, Listbox, LabelFrame, Radiobutton, IntVar, Toplevel
+from tkinter import Tk, Text, BOTH, W, N, E, S, LEFT, END, Listbox, LabelFrame, Radiobutton, IntVar, Toplevel, font
 from tkinter.ttk import Frame, Button, Label, Style, Combobox
 import Version.v01.Database as db
 import Version.v01.Validation.Helper as helper
@@ -9,12 +9,19 @@ import time
 # Tk, Text, BOTH, W, N, E, S, Listbox, LabelFrame, Radiobutton, IntVar
 
 class Example(Frame):
-    def __init__(self, usr, userId):
+    def __init__(self, usr, userId, nastupp):
         super().__init__()
         u = usr
-        self.lbData = Listbox(self)
+        self.lbData = Listbox(self, font=('Courier New', 12))
+        self.vypis = LabelFrame(self, text="Výpis")
+        self.odchozenoHodin = "Odchozeno hodin: "
+        self.celkovaMzda = "Celková mzda: "
+        self.lblHodiny = Label(self.vypis, text=self.odchozenoHodin)
+        self.lblMzda = Label(self.vypis, text=self.celkovaMzda)
         self.conn = db.create_connection()
         self.user_id = userId
+        self.odchozeno = "Odchozeno:"
+        self.nastup = "Nástup: " + nastupp
         self.userLogIn = "Přihlášen: " + usr
         self.initUI()
 
@@ -26,18 +33,24 @@ class Example(Frame):
         month = self.get_month()
         print("mm: " + str(month))
         p_rows = db.select_presence_by_user_id(self.conn, self.user_id, year, month)
-        format = '%H:%M'
-        # print
-        # datetime.strptime(time2, format) -
-        # datetime.strptime(time1, format)
         for x in p_rows:
-            print(datetime.strptime(helper.Validation.time_covert(x[2]), format) - datetime.strptime(helper.Validation.time_covert(x[1]), format))
-            vstup = helper.Validation.date_convert(x[3]) + \
-                    " :: " \
+            # print(datetime.strptime(helper.Validation.time_covert(x[2]), format) - datetime.strptime(helper.Validation.time_covert(x[1]), format))
+            vstup = helper.Validation.date_convert(x[3]) \
+                    + " :: " \
                     + helper.Validation.time_covert(x[1]) \
                     + " - " \
-                    + helper.Validation.time_covert(x[2])
+                    + helper.Validation.time_covert(x[2]) \
+                    + " >  " + str(helper.Validation.pocet_hodin(x[2], x[1]))
             self.lbData.insert(END, vstup)
+
+        self.odchozenoHodin = db.select_user_time(self.conn, self.user_id, year, month)
+        self.celkovaMzda = db.select_user_mzda(self.conn, self.user_id, year, month)
+
+
+        self.lblHodiny["text"] = "Odchozeno hodin: " + self.odchozenoHodin
+        self.lblMzda["text"] = "Celková mzda: " + self.celkovaMzda
+
+
 
     def clear(self):
         self.lbData.delete(0, END)
@@ -59,11 +72,11 @@ class Example(Frame):
 
         self.columnconfigure(1, weight=1)
         self.columnconfigure(3, pad=7)
-        self.rowconfigure(3, weight=1)
-        self.rowconfigure(5, pad=7)
+        self.rowconfigure(4, weight=1)
+        self.rowconfigure(6, pad=7)
 
-        lblMonth = Label(self, text="Měsíc:")
-        lblMonth.grid(row=1, column=0, sticky=W, pady=4, padx=5)
+        # lblMonth = Label(self, text="Měsíc:")
+        # lblMonth.grid(row=1, column=0, sticky=W, pady=4, padx=5)
 
         user_years = list()
 
@@ -85,27 +98,20 @@ class Example(Frame):
             "Prosinec"))
         self.cbMonth.set("Leden")
         self.cbMonth.bind('<<ComboboxSelected>>', self.cb_month_update)
-        self.cbMonth.grid(row=1, column=1, sticky=W, pady=2, padx=50)
+        self.cbMonth.grid(row=1, column=0, pady=2, padx = 5, sticky=W)
 
-        lblYear = Label(self, text="Rok:")
-        lblYear.grid(row=2, column=0, sticky=W, pady=4, padx=5)
+        # lblYear = Label(self, text="Rok:")
+        # lblYear.grid(row=2, column=0, sticky=W, pady=4, padx=5)
 
         self.cbYear = Combobox(self, state="readonly", values=user_years)
         self.cbYear.set(user_years[0])
-        self.cbYear.grid(row=2, column=1, sticky=W, pady=2, padx=50)
+        self.cbYear.grid(row=2, column=0, pady=2, padx=5, sticky=W)
 
-        # lblYear = Label(self, text="Formát:")
-        # lblYear.grid(row=3, column=0, sticky=W, pady=4, padx=5)
+        #13.04.2021 :: 17:43 - 11:34
+        lblFormat = Label(self, text="DD.MM.YYYY :: HH:MM - HH:MM >", font=('Courier New', 12))
+        lblFormat.grid(row=3, column=0, sticky=W, pady=4, padx=5)
 
-        # area = Text(self)
-        # area.grid(row=3, column=0, columnspan=2, rowspan=4,
-        #    padx=5, sticky=E+W+S+N)
-
-
-        # for item in [u"jedna", u"dva", u"tři", u"čtyři"]:
-        #     lb.insert(END, item)
-
-        self.lbData.grid(row=3, column=0, columnspan=4, rowspan=1,
+        self.lbData.grid(row=4, column=0, columnspan=4, rowspan=1,
                 padx=5, sticky=E + W + S + N)
 
         lblUser = Label(self, text=self.userLogIn)
@@ -114,11 +120,17 @@ class Example(Frame):
         btnUpdate = Button(self, text="Aktualizovat", command=self.btnUpdateEvent)
         btnUpdate.grid(row=1, column=3, sticky=E, padx="4")
 
+        lblHire = Label(self, text=self.nastup)
+        lblHire.grid(row=2, column=2, sticky=W, pady=4)
+
+        lblOdchozeno = Label(self, text="odchozeno", font=('Courier New', 12))
+        lblOdchozeno.grid(row=3, column=2, sticky=W, pady=4, padx=5)
+
         btnLogOut = Button(self, text="Clear", command=self.clear)
         btnLogOut.grid(row=2, column=3, pady=4, sticky=E, padx="4")
 
         gbZapis = LabelFrame(self, text="Zápis")
-        gbZapis.grid(row=5, padx=10, column=0, columnspan=4, rowspan=1, sticky=E + W + S + N)
+        gbZapis.grid(row=6, padx=10, column=0, columnspan=4, rowspan=1, sticky=E + W + S + N)
 
         var = IntVar()
         rbPrichod = Radiobutton(gbZapis, text="Příchod", variable=var, value=0)
@@ -132,16 +144,10 @@ class Example(Frame):
         btnZapsat = Button(gbZapis, text="Zapsat")
         btnZapsat.grid(row=1, sticky=W, pady=2, padx=160)
 
-        vypis = LabelFrame(self, text="Výpis")
-        vypis.grid(row=6, pady=10, padx=10, column=0, columnspan=4, rowspan=1, sticky=E + W + S + N)
+        self.vypis.grid(row=7, pady=10, padx=10, column=0, columnspan=4, rowspan=1, sticky=E + W + S + N)
 
-        lblHodiny = Label(vypis, text="Odchozeno hodin:")
-        lblHodiny.grid(row=1, sticky=W, pady=4, padx=5)
+        self.lblHodiny.grid(row=1, sticky=W, pady=4, padx=5)
 
-        lblMzda = Label(vypis, text="Vydělaná mzda:")
-        lblMzda.grid(row=1, sticky=W, pady=4, padx=155)
-
-        # obtn = Button(self, text="OK")
-        # obtn.grid(row=5, column=3)
+        self.lblMzda.grid(row=1, sticky=W, pady=4, padx=155)
 
 

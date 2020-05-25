@@ -1,3 +1,5 @@
+from datetime import datetime
+
 class Validation:
 
     def month_to_number(x):
@@ -38,5 +40,15 @@ class Validation:
 
         return newTime
 
-    #def pocet_hodin:
+    def pocet_hodin(time_1, time_2):
+        format = '%H:%M'
+        date_x = datetime.strptime(Validation.time_covert(time_1), format) - datetime.strptime(Validation.time_covert(time_2), format)
+        string_x = str(date_x)
+        string_x = string_x[:-3]
+        return Validation.time_covert(string_x)
 
+    def number_to_time(hours, minutes):
+        m = str('{:02d}:{:02d}'.format(*divmod(minutes, 60))) # Minuty na na hh:mm
+        final_h = int(hours) + int(m.split(":")[0]) # Final hodiny
+        final = str(final_h) + ":" + str(int(m.split(":")[1]))
+        return final

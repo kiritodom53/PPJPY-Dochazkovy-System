@@ -1,6 +1,7 @@
 import sqlite3
 from sqlite3 import Error
 import Version.v01.Validation.Helper as helper
+from datetime import datetime
 
 conn = None
 db_file = r"C:\Users\dom53\Documents\_workspace\____new_project_here\_python-project\DochazkovySystem\_files\dochazkadb.db"
@@ -120,11 +121,62 @@ def select_presence_by_user_id(conn, id, date, month):
     print(convert_month)
     mesic = date+'-'+convert_month+'%'
     print(mesic)
-    cur.execute("SELECT * FROM presence WHERE userId= ? AND date LIKE ?", (id, date+'-'+convert_month+'%',))
+    cur.execute("SELECT * FROM presence WHERE userId= ? AND date LIKE ? ORDER BY date", (id, date+'-'+convert_month+'%',))
 
     rows = cur.fetchall()
     # print(row)
     return rows
+
+def select_user_time(conn, id, date, month):
+
+    cur = conn.cursor()
+
+    h = 0
+    m = 0
+    convert_month = helper.Validation.month_to_number(month)
+
+    # convert_month = helper.Validation.month_to_number(month)
+    # print(convert_month)
+    cur.execute("SELECT timeIn, timeOut FROM presence WHERE userId= ? AND date LIKE ? ORDER BY date", (id, date+'-'+convert_month+'%',))
+    rows = cur.fetchall()
+    for x in rows:
+        celkovy_cas = helper.Validation.pocet_hodin(x[1], x[0])
+        print(celkovy_cas)
+        h += int(celkovy_cas.split(":")[0])
+        m += int(celkovy_cas.split(":")[1])
+
+    print(h)
+    print(m)
+    # t = '{:02d}:{:02d}'.format(*divmod(m, 60))
+    #print(helper.Validation.number_to_time(h, m))
+    #print(celkovy_cas)
+    # print(row)
+    return helper.Validation.number_to_time(h, m)
+
+
+def select_user_mzda(conn, id, date, month):
+    time = select_user_time(conn, id, date, month)
+
+    cur = conn.cursor()
+    cur.execute("SELECT wagePerHour FROM users WHERE userId= ?", (id,))
+    row = cur.fetchall()
+    print("time: " + time + ", mzda: " + str(row[0]))
+
+
+    t = time
+    (h, m) = t.split(':')
+    result = int(h) * 3600 + int(m) * 60
+    final_hours = result / 60 / 60
+    # print(str(int(final_hours) * float(row[0])) + ",-Kč")
+    mzda = row[0]
+    print("minutes: ", result)
+    print("hodiny: ", final_hours)
+    print("mzda: ", row[0][0])
+    print(float(final_hours) * float(row[0][0]))
+    celkova_mzda = float(final_hours) * float(row[0][0])
+    return str(round(celkova_mzda, 2)) + ",-Kč"
+    #return float(final_hours) * float(row[0])
+
 
 def select_user_by_credentials(conn, username, password):
     cur = conn.cursor()
