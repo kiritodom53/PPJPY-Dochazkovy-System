@@ -27,7 +27,7 @@ class Main_Win:
     def __init__(self, main_win=Tk()):  # This is my first change so i already initialize a Tk window inside the class
         self.main_win = main_win
         main_win.title("Docházkový systém MANDINEC - " + qq)
-        main_win.geometry("563x500")
+        main_win.geometry("700x500")
         app = td.Example(qq, userId, nastup)
         #main_win.geometry("900x500+250+130")
 

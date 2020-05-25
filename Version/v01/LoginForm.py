@@ -80,7 +80,7 @@ class Login_Page:
         login_completed = self.login_completed.get()
 
         # AUTO DATA PRO TESTOVÁNÍ
-        name = "admin"
+        name = "dom53"
         password = "admin"
 
         conn = db.create_connection()

@@ -1,4 +1,4 @@
-from tkinter import Tk, Text, BOTH, W, N, E, S, LEFT, END, Listbox, LabelFrame, Radiobutton, IntVar, Toplevel, font
+from tkinter import Tk, Text, BOTH, W, N, E, S, LEFT, END, Listbox, LabelFrame, Radiobutton, IntVar, Toplevel, font, messagebox
 from tkinter.ttk import Frame, Button, Label, Style, Combobox
 import Version.v01.Database as db
 import Version.v01.Validation.Helper as helper
@@ -16,7 +16,7 @@ class Example(Frame):
         self.lbData = Listbox(self, font=('Courier New', 12))
         self.vypis = LabelFrame(self, text="Výpis")
         self.odchozenoHodin = "Odchozeno hodin: 0:0"
-        self.celkovaMzda = "Celková mzda: 0,00 Kč"
+        self.celkovaMzda = "Celková hrubá mzda: 0,00 Kč"
         self.pocetDnu = "Počet dnů: 0"
         self.cbYear = Combobox(self, state="readonly")
         self.lblHodiny = Label(self.vypis, text=self.odchozenoHodin)
@@ -32,13 +32,13 @@ class Example(Frame):
     def btnZapsatEvent(self):
         date_now = datetime.today().strftime('%Y-%m-%d')
         time_now = datetime.today().strftime('%H:%M')
-        print("______________")
-        print("btnZapsatEvent")
-        print("‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾")
-        print("typ zápisu: ", self.var.get())
-        print("datum: ", date_now)
-        print("time: ", time_now)
-        print("userId", self.user_id)
+        # print("______________")
+        # print("btnZapsatEvent")
+        # print("‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾")
+        # print("typ zápisu: ", self.var.get())
+        # print("datum: ", date_now)
+        # print("time: ", time_now)
+        # print("userId", self.user_id)
 
         zapis = self.var.get()
 
@@ -53,6 +53,7 @@ class Example(Frame):
                 db.create_presence_in(self.conn, presence_in)
             else:
                 print("Již je zapsán příchod")
+                messagebox.showwarning("Chyba zapsání příchodu!", "Již je zapsán příchod!")
         else:
             print(zapis)
             if(db.exist_timeIn(self.conn, self.user_id, date_now) == True):
@@ -61,6 +62,7 @@ class Example(Frame):
                     db.create_presence_out(self.conn, presence_out)
                 else:
                     print("Již je zapsán odchod")
+                    messagebox.showwarning("Chyba zapsání odchodu!", "Již je zapsán odchod!")
             else:
                 print("Nejdříve zapište příchod")
             # Odchod
@@ -77,7 +79,7 @@ class Example(Frame):
         self.clear()
         year = self.get_year()
         month = self.get_month()
-        print("mm: " + str(month))
+        # print("mm: " + str(month))
         p_rows = db.select_presence_by_user_id(self.conn, self.user_id, year, month)
         for x in p_rows:
             vstup = helper.Validation.date_convert(x[3]) \
@@ -102,7 +104,7 @@ class Example(Frame):
 
 
         self.lblHodiny["text"] = "Odchozeno hodin: " + self.odchozenoHodin
-        self.lblMzda["text"] = "Celková mzda: " + self.celkovaMzda
+        self.lblMzda["text"] = "Celková hrubá mzda: " + self.celkovaMzda
         self.lblPocetDnu["text"] = "Počet dnů: " + str(self.pocetDnu)
 
 
@@ -110,7 +112,7 @@ class Example(Frame):
     def clear(self):
         self.lbData.delete(0, END)
         self.lblHodiny["text"] = "Odchozeno hodin: 0:0"
-        self.lblMzda["text"] = "Celková mzda: 0,00 Kč"
+        self.lblMzda["text"] = "Celková hrubá mzda: 0,00 Kč"
         self.lblPocetDnu["text"] = "Počet dnů: 0"
 
     def get_year(self):
@@ -132,7 +134,7 @@ class Example(Frame):
         temp_year = db.get_presence_groupby_year_by_id(self.conn, self.user_id)
         print("temp: " + str(len(temp_year)))
         for x in temp_year:
-            print(x)
+            # print(x)
             user_years.append(x)
 
         if (len(temp_year) == 0):

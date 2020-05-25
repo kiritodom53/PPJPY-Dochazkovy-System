@@ -174,12 +174,12 @@ def select_user_time(conn, id, date, month):
     rows = cur.fetchall()
     for x in rows:
         celkovy_cas = helper.Validation.pocet_hodin(x[1], x[0])
-        print(celkovy_cas)
+        # print(celkovy_cas)
         h += int(celkovy_cas.split(":")[0])
         m += int(celkovy_cas.split(":")[1])
 
-    print(h)
-    print(m)
+    # print(h)
+    # print(m)
     # t = '{:02d}:{:02d}'.format(*divmod(m, 60))
     #print(helper.Validation.number_to_time(h, m))
     #print(celkovy_cas)
@@ -193,7 +193,7 @@ def select_user_mzda(conn, id, date, month):
     cur = conn.cursor()
     cur.execute("SELECT wagePerHour FROM users WHERE userId= ?", (id,))
     row = cur.fetchall()
-    print("time: " + time + ", mzda: " + str(row[0]))
+    # print("time: " + time + ", mzda: " + str(row[0]))
 
 
     t = time
@@ -202,10 +202,10 @@ def select_user_mzda(conn, id, date, month):
     final_hours = result / 60 / 60
     # print(str(int(final_hours) * float(row[0])) + ",-Kč")
     mzda = row[0]
-    print("minutes: ", result)
-    print("hodiny: ", final_hours)
-    print("mzda: ", row[0][0])
-    print(float(final_hours) * float(row[0][0]))
+    # print("minutes: ", result)
+    # print("hodiny: ", final_hours)
+    # print("mzda: ", row[0][0])
+    # print(float(final_hours) * float(row[0][0]))
     celkova_mzda = float(final_hours) * float(row[0][0])
 
     locale.setlocale(locale.LC_ALL, '')

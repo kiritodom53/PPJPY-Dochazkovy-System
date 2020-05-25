@@ -41,8 +41,6 @@ class Validation:
         return newTime
 
     def pocet_hodin(time_1, time_2):
-        if(time_1 is not None):
-            print("---" + time_1 + "---" + time_2 + '---')
         format = '%H:%M'
         date_x = datetime.strptime(Validation.time_covert(time_1), format) - datetime.strptime(Validation.time_covert(time_2), format)
         string_x = str(date_x)
