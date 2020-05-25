@@ -12,6 +12,7 @@ class Example(Frame):
     def __init__(self, usr, userId, nastupp):
         super().__init__()
         u = usr
+        self.var = IntVar()
         self.lbData = Listbox(self, font=('Courier New', 12))
         self.vypis = LabelFrame(self, text="Výpis")
         self.odchozenoHodin = "Odchozeno hodin: "
@@ -25,6 +26,45 @@ class Example(Frame):
         self.userLogIn = "Přihlášen: " + usr
         self.initUI()
 
+    def btnZapsatEvent(self):
+        date_now = datetime.today().strftime('%Y-%m-%d')
+        time_now = datetime.today().strftime('%H:%M')
+        print("______________")
+        print("btnZapsatEvent")
+        print("‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾")
+        print("typ zápisu: ", self.var.get())
+        print("datum: ", date_now)
+        print("time: ", time_now)
+        print("userId", self.user_id)
+
+        zapis = self.var.get()
+
+        if (zapis == 0):
+            print(zapis)
+            # Příchod
+            # Nový zápis
+            # Kontrola da už je tenhle datum zapsán
+            # db.exist_timeIn(self.conn, self.user_id, date_now)
+            if(db.exist_timeIn(self.conn, self.user_id, date_now) == False):
+                presence_in = (time_now, date_now, self.user_id)
+                db.create_presence_in(self.conn, presence_in)
+            else:
+                print("Již je zapsán příchod")
+        else:
+            print(zapis)
+            if(db.exist_timeIn(self.conn, self.user_id, date_now) == True):
+                if (db.exist_timeOut(self.conn, self.user_id, date_now) == False):
+                    presence_out = (time_now, date_now, self.user_id)
+                    db.create_presence_out(self.conn, presence_out)
+                else:
+                    print("Již je zapsán odchod")
+            else:
+                print("Nejdříve zapište příchod")
+            # Odchod
+            # Update zápisu
+            # Kontrola da už je tenhle datum zapsán
+
+
     def btnUpdateEvent(self):
         print("btnUpdateEvent")
         print(self.user_id)
@@ -34,13 +74,20 @@ class Example(Frame):
         print("mm: " + str(month))
         p_rows = db.select_presence_by_user_id(self.conn, self.user_id, year, month)
         for x in p_rows:
-            # print(datetime.strptime(helper.Validation.time_covert(x[2]), format) - datetime.strptime(helper.Validation.time_covert(x[1]), format))
             vstup = helper.Validation.date_convert(x[3]) \
                     + " :: " \
                     + helper.Validation.time_covert(x[1]) \
-                    + " - " \
-                    + helper.Validation.time_covert(x[2]) \
-                    + " >  " + str(helper.Validation.pocet_hodin(x[2], x[1]))
+                    + " - "
+
+
+            if (x[2] is None):
+                # print("none")
+                # print(x[2])
+                vstup += "xx:xx"
+            else:
+                vstup += helper.Validation.time_covert(x[2])
+                # print(datetime.strptime(helper.Validation.time_covert(x[2]), format) - datetime.strptime(helper.Validation.time_covert(x[1]), format))
+                vstup += " >  " + str(helper.Validation.pocet_hodin(x[2], x[1]))
             self.lbData.insert(END, vstup)
 
         self.odchozenoHodin = db.select_user_time(self.conn, self.user_id, year, month)
@@ -54,6 +101,8 @@ class Example(Frame):
 
     def clear(self):
         self.lbData.delete(0, END)
+        self.lblHodiny["text"] = "Odchozeno hodin: "
+        self.lblMzda["text"] = "Celková mzda: "
 
     def get_year(self):
         return self.cbYear.get()
@@ -88,6 +137,9 @@ class Example(Frame):
         for x in temp_year:
             print(x)
             user_years.append(x)
+
+        if(len(temp_year) == 0):
+            user_years.append("Žádný zápis")
 
         # for x in user_years:
         #     print("---")
@@ -132,16 +184,15 @@ class Example(Frame):
         gbZapis = LabelFrame(self, text="Zápis")
         gbZapis.grid(row=6, padx=10, column=0, columnspan=4, rowspan=1, sticky=E + W + S + N)
 
-        var = IntVar()
-        rbPrichod = Radiobutton(gbZapis, text="Příchod", variable=var, value=0)
+        rbPrichod = Radiobutton(gbZapis, text="Příchod", variable=self.var, value=0)
         rbPrichod.grid(row=1, sticky=W, pady=2, padx=0)
         # t1.pack()
 
-        rbOdchod = Radiobutton(gbZapis, text="Odchod", variable=var, value=1)
+        rbOdchod = Radiobutton(gbZapis, text="Odchod", variable=self.var, value=1)
         rbOdchod.grid(row=1, sticky=W, pady=2, padx=80)
         # t2.pack(side=LEFT)
 
-        btnZapsat = Button(gbZapis, text="Zapsat")
+        btnZapsat = Button(gbZapis, text="Zapsat", command=self.btnZapsatEvent)
         btnZapsat.grid(row=1, sticky=W, pady=2, padx=160)
 
         self.vypis.grid(row=7, pady=10, padx=10, column=0, columnspan=4, rowspan=1, sticky=E + W + S + N)

@@ -79,6 +79,10 @@ class Login_Page:
         password = self.password_box.get()
         login_completed = self.login_completed.get()
 
+        # AUTO DATA PRO TESTOVÁNÍ
+        name = "admin"
+        password = "admin"
+
         conn = db.create_connection()
         # us = db.select_user_by_id(conn, 1)
         # row = db.select_user_by_id(conn, 1)[0]
@@ -95,13 +99,18 @@ class Login_Page:
         userId = row[0]
         hire = row[5]
 
+        # Potom zapnout
         if name == row[1] and password == row[2]:
             #Main_Win.setUzv(uu)
-            messagebox.showinfo("Login page", "Login successful!")
+
+            # Potom zapnout
+            # messagebox.showinfo("Login page", "Login successful!")
             self.login.destroy()  # Removes the toplevel window
             # self.main_win.deiconify() #Unhides the root window
             self.login_completed == 1
 
+
+        # Potom zapnout
         else:
             messagebox.showwarning("Login Failed - Acess Denied", "Username or Password incorrect!")
 

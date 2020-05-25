@@ -1,6 +1,7 @@
 import sqlite3
 from sqlite3 import Error
 import Version.v01.Validation.Helper as helper
+import locale
 from datetime import datetime
 
 conn = None
@@ -31,8 +32,8 @@ def main():
 
     presenceTable = """ CREATE TABLE IF NOT EXISTS presence (
                                             id INTEGER PRIMARY KEY not null,
-                                            timeIn VARCHAR(5) not null,
-                                            timeOut VARCHAR(5) not null,
+                                            timeIn VARCHAR(5) null,
+                                            timeOut VARCHAR(5) null,
                                             date VARCHAR(10) not null,
                                             userId int not null,
                                             FOREIGN KEY (userId) REFERENCES users(userId)
@@ -111,6 +112,26 @@ def select_user_by_id(conn, id):
     # print(row)
     return row
 
+def exist_timeIn(conn, id, date):
+    cur = conn.cursor()
+    cur.execute("SELECT count(*) FROM presence WHERE userId=? AND date=?", (id, date,))
+
+    row = cur.fetchall()
+    if(row[0][0] == 0):
+        return False
+    return True
+    #return row
+
+def exist_timeOut(conn, id, date):
+    cur = conn.cursor()
+    cur.execute("SELECT count(*) FROM presence WHERE userId=? AND date=? AND timeOut IS NULL", (id, date,))
+
+    row = cur.fetchall()
+    print(row[0][0])
+    if(row[0][0] == 1):
+        return False
+    return True
+
 def select_presence_by_user_id(conn, id, date, month):
 
     cur = conn.cursor()
@@ -137,7 +158,7 @@ def select_user_time(conn, id, date, month):
 
     # convert_month = helper.Validation.month_to_number(month)
     # print(convert_month)
-    cur.execute("SELECT timeIn, timeOut FROM presence WHERE userId= ? AND date LIKE ? ORDER BY date", (id, date+'-'+convert_month+'%',))
+    cur.execute("SELECT timeIn, timeOut FROM presence WHERE userId= ? AND timeOut is not null AND date LIKE ? ORDER BY date", (id, date+'-'+convert_month+'%',))
     rows = cur.fetchall()
     for x in rows:
         celkovy_cas = helper.Validation.pocet_hodin(x[1], x[0])
@@ -174,7 +195,11 @@ def select_user_mzda(conn, id, date, month):
     print("mzda: ", row[0][0])
     print(float(final_hours) * float(row[0][0]))
     celkova_mzda = float(final_hours) * float(row[0][0])
-    return str(round(celkova_mzda, 2)) + ",-Kč"
+
+    locale.setlocale(locale.LC_ALL, '')
+    mzd = locale.currency(round(celkova_mzda, 2), grouping=True)
+
+    return str(mzd)
     #return float(final_hours) * float(row[0])
 
 
@@ -245,6 +270,21 @@ def create_user(conn, project):
 def create_presence(conn, project):
     sql = ''' INSERT INTO presence(id,timeIn,timeOut,date,userId)
               VALUES(?,?,?,?,?) '''
+    cur = conn.cursor()
+    cur.execute(sql, project)
+    conn.commit()
+
+def create_presence_in(conn, project):
+    sql = ''' INSERT INTO presence(timeIn,date,userId)
+              VALUES(?,?,?) '''
+    cur = conn.cursor()
+    cur.execute(sql, project)
+    conn.commit()
+
+def create_presence_out(conn, project):
+    sql = ''' UPDATE presence
+                  SET timeOut = ?
+                  WHERE date = ? AND userId = ?'''
     cur = conn.cursor()
     cur.execute(sql, project)
     conn.commit()
