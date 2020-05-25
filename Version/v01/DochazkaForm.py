@@ -15,10 +15,13 @@ class Example(Frame):
         self.var = IntVar()
         self.lbData = Listbox(self, font=('Courier New', 12))
         self.vypis = LabelFrame(self, text="Výpis")
-        self.odchozenoHodin = "Odchozeno hodin: "
-        self.celkovaMzda = "Celková mzda: "
+        self.odchozenoHodin = "Odchozeno hodin: 0:0"
+        self.celkovaMzda = "Celková mzda: 0,00 Kč"
+        self.pocetDnu = "Počet dnů: 0"
+        self.cbYear = Combobox(self, state="readonly")
         self.lblHodiny = Label(self.vypis, text=self.odchozenoHodin)
         self.lblMzda = Label(self.vypis, text=self.celkovaMzda)
+        self.lblPocetDnu = Label(self.vypis, text=self.pocetDnu)
         self.conn = db.create_connection()
         self.user_id = userId
         self.odchozeno = "Odchozeno:"
@@ -63,9 +66,12 @@ class Example(Frame):
             # Odchod
             # Update zápisu
             # Kontrola da už je tenhle datum zapsán
+        self.btnUpdateEvent()
 
 
     def btnUpdateEvent(self):
+        user_years = self.get_update_mesic_cb()
+        self.cbYear["values"] = user_years
         print("btnUpdateEvent")
         print(self.user_id)
         self.clear()
@@ -92,17 +98,20 @@ class Example(Frame):
 
         self.odchozenoHodin = db.select_user_time(self.conn, self.user_id, year, month)
         self.celkovaMzda = db.select_user_mzda(self.conn, self.user_id, year, month)
+        self.pocetDnu = db.select_user_day_count(self.conn, self.user_id, year, month)
 
 
         self.lblHodiny["text"] = "Odchozeno hodin: " + self.odchozenoHodin
         self.lblMzda["text"] = "Celková mzda: " + self.celkovaMzda
+        self.lblPocetDnu["text"] = "Počet dnů: " + str(self.pocetDnu)
 
 
 
     def clear(self):
         self.lbData.delete(0, END)
-        self.lblHodiny["text"] = "Odchozeno hodin: "
-        self.lblMzda["text"] = "Celková mzda: "
+        self.lblHodiny["text"] = "Odchozeno hodin: 0:0"
+        self.lblMzda["text"] = "Celková mzda: 0,00 Kč"
+        self.lblPocetDnu["text"] = "Počet dnů: 0"
 
     def get_year(self):
         return self.cbYear.get()
@@ -114,6 +123,22 @@ class Example(Frame):
         temp = self.cbMonth.get()
         print(temp)
         return "2019"
+
+    def get_update_mesic_cb(self):
+        user_years = list()
+
+        print("userId: " + str(self.user_id))
+
+        temp_year = db.get_presence_groupby_year_by_id(self.conn, self.user_id)
+        print("temp: " + str(len(temp_year)))
+        for x in temp_year:
+            print(x)
+            user_years.append(x)
+
+        if (len(temp_year) == 0):
+            user_years.append("Žádný zápis")
+
+        return user_years
 
     def initUI(self):
         #self.master.title("Docházkový systém")
@@ -127,19 +152,21 @@ class Example(Frame):
         # lblMonth = Label(self, text="Měsíc:")
         # lblMonth.grid(row=1, column=0, sticky=W, pady=4, padx=5)
 
-        user_years = list()
-
-
-        print("userId: " + str(self.user_id))
-
-        temp_year = db.get_presence_groupby_year_by_id(self.conn, self.user_id)
-        print("temp: " + str(len(temp_year)))
-        for x in temp_year:
-            print(x)
-            user_years.append(x)
-
-        if(len(temp_year) == 0):
-            user_years.append("Žádný zápis")
+        user_years = self.get_update_mesic_cb()
+        print(user_years)
+        # user_years = list()
+        #
+        #
+        # print("userId: " + str(self.user_id))
+        #
+        # temp_year = db.get_presence_groupby_year_by_id(self.conn, self.user_id)
+        # print("temp: " + str(len(temp_year)))
+        # for x in temp_year:
+        #     print(x)
+        #     user_years.append(x)
+        #
+        # if(len(temp_year) == 0):
+        #     user_years.append("Žádný zápis")
 
         # for x in user_years:
         #     print("---")
@@ -155,12 +182,13 @@ class Example(Frame):
         # lblYear = Label(self, text="Rok:")
         # lblYear.grid(row=2, column=0, sticky=W, pady=4, padx=5)
 
-        self.cbYear = Combobox(self, state="readonly", values=user_years)
+        self.cbYear["values"] = user_years
         self.cbYear.set(user_years[0])
         self.cbYear.grid(row=2, column=0, pady=2, padx=5, sticky=W)
 
         #13.04.2021 :: 17:43 - 11:34
-        lblFormat = Label(self, text="DD.MM.YYYY :: HH:MM - HH:MM >", font=('Courier New', 12))
+        lblFormat = Label(self, text="datum :: příchod - odchod > doba", font=('Courier New', 12))
+        # lblFormat = Label(self, text="DD.MM.YYYY :: HH:MM - HH:MM >", font=('Courier New', 12))
         lblFormat.grid(row=3, column=0, sticky=W, pady=4, padx=5)
 
         self.lbData.grid(row=4, column=0, columnspan=4, rowspan=1,
@@ -175,8 +203,8 @@ class Example(Frame):
         lblHire = Label(self, text=self.nastup)
         lblHire.grid(row=2, column=2, sticky=W, pady=4)
 
-        lblOdchozeno = Label(self, text="odchozeno", font=('Courier New', 12))
-        lblOdchozeno.grid(row=3, column=2, sticky=W, pady=4, padx=5)
+        # lblOdchozeno = Label(self, text="odchozeno", font=('Courier New', 12))
+        # lblOdchozeno.grid(row=3, column=2, sticky=W, pady=4, padx=5)
 
         btnLogOut = Button(self, text="Clear", command=self.clear)
         btnLogOut.grid(row=2, column=3, pady=4, sticky=E, padx="4")
@@ -185,20 +213,20 @@ class Example(Frame):
         gbZapis.grid(row=6, padx=10, column=0, columnspan=4, rowspan=1, sticky=E + W + S + N)
 
         rbPrichod = Radiobutton(gbZapis, text="Příchod", variable=self.var, value=0)
-        rbPrichod.grid(row=1, sticky=W, pady=2, padx=0)
+        rbPrichod.grid(row=1, column=1, sticky=W, pady=2, padx=5)
         # t1.pack()
 
         rbOdchod = Radiobutton(gbZapis, text="Odchod", variable=self.var, value=1)
-        rbOdchod.grid(row=1, sticky=W, pady=2, padx=80)
+        rbOdchod.grid(row=1, column=2, sticky=W, pady=2, padx=5)
         # t2.pack(side=LEFT)
 
         btnZapsat = Button(gbZapis, text="Zapsat", command=self.btnZapsatEvent)
-        btnZapsat.grid(row=1, sticky=W, pady=2, padx=160)
+        btnZapsat.grid(row=1, column=3, sticky=W, pady=2, padx=5)
 
         self.vypis.grid(row=7, pady=10, padx=10, column=0, columnspan=4, rowspan=1, sticky=E + W + S + N)
 
-        self.lblHodiny.grid(row=1, sticky=W, pady=4, padx=5)
-
-        self.lblMzda.grid(row=1, sticky=W, pady=4, padx=155)
+        self.lblHodiny.grid(row=1, column=1, sticky=W, pady=4, padx=5)
+        self.lblMzda.grid(row=1, column=2, sticky=W, pady=4, padx=5)
+        self.lblPocetDnu.grid(row=1, column=3, sticky=W, pady=4, padx=5)
 
 

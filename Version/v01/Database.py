@@ -148,6 +148,18 @@ def select_presence_by_user_id(conn, id, date, month):
     # print(row)
     return rows
 
+def select_user_day_count(conn, id, date, month):
+    cur = conn.cursor()
+    convert_month = helper.Validation.month_to_number(month)
+    # print(convert_month)
+    cur.execute(
+        "SELECT count(*) FROM presence WHERE userId= ? AND timeOut is not null AND date LIKE ? ORDER BY date",
+        (id, date + '-' + convert_month + '%',))
+    row = cur.fetchall()
+
+    return row[0][0]
+
+
 def select_user_time(conn, id, date, month):
 
     cur = conn.cursor()
