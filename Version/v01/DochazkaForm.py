@@ -28,6 +28,7 @@ class Example(Frame):
         self.nastup = "Nástup: " + nastupp
         self.userLogIn = "Přihlášen: " + usr
         self.initUI()
+        self.btnUpdateEvent()
 
     def btnZapsatEvent(self):
         date_now = datetime.today().strftime('%Y-%m-%d')
@@ -122,9 +123,14 @@ class Example(Frame):
         return self.cbMonth.get()
 
     def cb_month_update(self, event):
+        self.btnUpdateEvent()
         temp = self.cbMonth.get()
         print(temp)
-        return "2019"
+
+    def cb_year_update(self, event):
+        self.btnUpdateEvent()
+        temp = self.cbYear.get()
+        print(temp)
 
     def get_update_mesic_cb(self):
         user_years = list()
@@ -186,6 +192,7 @@ class Example(Frame):
 
         self.cbYear["values"] = user_years
         self.cbYear.set(user_years[0])
+        self.cbYear.bind('<<ComboboxSelected>>', self.cb_year_update)
         self.cbYear.grid(row=2, column=0, pady=2, padx=5, sticky=W)
 
         #13.04.2021 :: 17:43 - 11:34

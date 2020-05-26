@@ -28,6 +28,7 @@ class Main_Win:
         self.main_win = main_win
         main_win.title("Docházkový systém MANDINEC - " + qq)
         main_win.geometry("700x500")
+        main_win.minsize(700, 500)
         app = td.Example(qq, userId, nastup)
         #main_win.geometry("900x500+250+130")
 
