@@ -4,14 +4,16 @@ import Version.v01.Database as db
 import Version.v01.Validation.Helper as helper
 from datetime import datetime
 import time
+# import Version.v01.TestForm as tf
 
 
 # Tk, Text, BOTH, W, N, E, S, Listbox, LabelFrame, Radiobutton, IntVar
 
 class Example(Frame):
-    def __init__(self, usr, userId, nastupp):
+    def __init__(self, usr, userId, nastupp, isEmployer, root):
         super().__init__()
         u = usr
+        self.root = root
         self.var = IntVar()
         self.lbData = Listbox(self, font=('Courier New', 12))
         self.vypis = LabelFrame(self, text="Výpis")
@@ -24,11 +26,24 @@ class Example(Frame):
         self.lblPocetDnu = Label(self.vypis, text=self.pocetDnu)
         self.conn = db.create_connection()
         self.user_id = userId
+        self.isEmployer = isEmployer
         self.odchozeno = "Odchozeno:"
         self.nastup = "Nástup: " + nastupp
         self.userLogIn = "Přihlášen: " + usr
         self.initUI()
         self.btnUpdateEvent()
+
+    def open_test_form(self):
+        New_Window = Toplevel(self.root)
+        New_Window.mainloop()
+        # 5x TextBox (username, firstName, surname, password, wagePerHour)
+        # 1x Button - submit
+
+    def change_password(self):
+        print("change_password")
+        # 3x TextBox - (old password, new password, confirm password)
+        # 1x Button - submit
+
 
     def btnZapsatEvent(self):
         date_now = datetime.today().strftime('%Y-%m-%d')
@@ -217,6 +232,13 @@ class Example(Frame):
 
         btnLogOut = Button(self, text="Clear", command=self.clear)
         btnLogOut.grid(row=2, column=3, pady=4, sticky=E, padx="4")
+
+        if(self.isEmployer):
+            btnHire = Button(self, text="Hire", command=self.open_test_form)
+            btnHire.grid(row=3, column=3, pady=4, sticky=E, padx="4")
+        else:
+            btnChangePassword = Button(self, text="Změnit heslo", command=self.open_test_form)
+            btnChangePassword.grid(row=3, column=3, pady=4, sticky=E, padx="4")
 
         gbZapis = LabelFrame(self, text="Zápis")
         gbZapis.grid(row=6, padx=10, column=0, columnspan=4, rowspan=1, sticky=E + W + S + N)

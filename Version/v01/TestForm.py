@@ -104,7 +104,6 @@ class Login_Page:
         print("isEmployer")
         print(isEmployer)
 
-        #print ToDo: Hashovat heslo
         # Potom zapnout
         if name == row[1] and password == row[2]:
             #Main_Win.setUzv(uu)

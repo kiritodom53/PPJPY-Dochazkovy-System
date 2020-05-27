@@ -27,7 +27,8 @@ def main():
                                             firstName VARCHAR(255) not null,
                                             surname VARCHAR(255) not null,
                                             hireDate VARCHAR(10) not null,
-                                            wagePerHour INT NOT NULL DEFAULT 100
+                                            wagePerHour INT NOT NULL DEFAULT 100,
+                                            isEmployer BOOLEAN NOT NULL DEFAULT 0
                                         ); """
 
     presenceTable = """ CREATE TABLE IF NOT EXISTS presence (

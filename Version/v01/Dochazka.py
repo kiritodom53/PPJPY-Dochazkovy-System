@@ -9,13 +9,13 @@ import Version.v01.LoginForm as lg
 qq = None
 userId = None
 
-
-
-login_page = lg.Login_Page()# I dont need to pass the root now since its initialized inside the class
-login_page.mainloop_window()  # Just mainlooping the authentication window
+login_page = lg.Login_Page()  # I dont need to pass the root now since its initialized inside the class
+login_page.mainloop_window()
+# Just mainlooping the authentication window
 userId = login_page.get_user()
 qq = login_page.get_user_name()
 nastup = login_page.get_hire_date()
+isEmployer = login_page.is_employer()
 
 print("testloginform")
 print(userId)
@@ -26,10 +26,10 @@ print(login_page.get_user_name())
 class Main_Win:
     def __init__(self, main_win=Tk()):  # This is my first change so i already initialize a Tk window inside the class
         self.main_win = main_win
-        main_win.title("Docházkový systém MANDINEC - " + qq)
+        main_win.title("Docházkový systém MANDINEC - ")
         main_win.geometry("700x500")
         main_win.minsize(700, 500)
-        app = td.Example(qq, userId, nastup)
+        app = td.Example(qq, userId, nastup, isEmployer, main_win)
         #main_win.geometry("900x500+250+130")
 
 
