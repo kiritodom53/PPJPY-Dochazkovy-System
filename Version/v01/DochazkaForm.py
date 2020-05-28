@@ -1,7 +1,9 @@
-from tkinter import Tk, Text, BOTH, W, N, E, S, LEFT, END, Listbox, LabelFrame, Radiobutton, IntVar, Toplevel, font, messagebox
+from tkinter import Tk, Text, BOTH, W, N, E, S, LEFT, END, Listbox, Checkbutton, LabelFrame, Radiobutton, IntVar, Entry, Toplevel, font, messagebox
 from tkinter.ttk import Frame, Button, Label, Style, Combobox
+from tkcalendar import Calendar,DateEntry
 import Version.v01.Database as db
 import Version.v01.Validation.Helper as helper
+import Version.v01.Hire as hire
 from datetime import datetime
 import time
 # import Version.v01.TestForm as tf
@@ -33,9 +35,106 @@ class Example(Frame):
         self.initUI()
         self.btnUpdateEvent()
 
+#=======================================================================================================================
+#======================================================REGISTRACE=======================================================
+#=======================================================================================================================
+
+    def cb(self, ):
+        if self.var.get() == True:
+            self.password_box.configure(show="")
+        else:
+            self.password_box.configure(show="*")
+
     def open_test_form(self):
-        New_Window = Toplevel(self.root)
-        New_Window.mainloop()
+        print("test")
+        hire_win = Tk()
+        hire_form = hire.HireFrame(hire_win)
+        hire_form.mainloop()
+        # New_Window = Toplevel(self.root)
+        # # New_Window.geometry("450x250")
+        # New_Window.geometry("450x250+450+170")
+        # New_Window.minsize(450, 250)
+        # New_Window.maxsize(450, 250)
+        #
+        # self.popis_lbl = Label(New_Window, text="Registrace zaměstnance:")
+        # self.popis_lbl.grid(row=0, column=1, pady=5)
+        #
+        # self.username = Label(New_Window, text="Username:")
+        # # self.username.place(relx=0.285, rely=0.298, height=20, width=60)
+        # self.username.grid(row=1, column=2, pady=5)
+        #
+        # self.password = Label(New_Window, text="Password:")
+        # # self.password.place(relx=0.285, rely=0.468, height=20, width=60)
+        # self.password.grid(row=2, column=2, pady=5)
+        #
+        # self.firstName = Label(New_Window, text="Name:")
+        # # self.firstName.place(relx=0.285, rely=0.638, height=20, width=60)
+        # self.firstName.grid(row=3, column=2, pady=5)
+        #
+        # self.surname = Label(New_Window, text="Surname:")
+        # # self.surname.place(relx=0.285, rely=0.808, height=20, width=60)
+        # self.surname.grid(row=4, column=2, pady=5)
+        #
+        # self.hireDate = Label(New_Window, text="Hire date:")
+        # # self.hireDate.place(relx=0.285, rely=0.978, height=20, width=60)
+        # self.hireDate.grid(row=5, column=2, pady=5)
+        #
+        # self.wagePerHour = Label(New_Window, text="Wage /h:")
+        # # self.surname.place(relx=0.285, rely=0.1148, height=20, width=60)
+        # self.wagePerHour.grid(row=6, column=2, pady=5)
+        #
+        # # Creating Buttons
+        #
+        # self.hire_button = Button(New_Window, text="Hire!")
+        # self.hire_button.grid(row=7, column=2, columnspan=2, pady=5)
+        # # self.hire_button(relx=0.440, rely=0.638, height=30, width=60)
+        # # self.hire_button.configure(command=self.login_user)
+        # #
+        # # self.login_completed = IntVar()
+        # #
+        # # self.exit_button = Button(New_Window, text="Exit")  # , command=master.quit)
+        # # self.exit_button.place(relx=0.614, rely=0.638, height=30, width=60)
+        # # self.exit_button.configure(command=self.exit_login)
+        #
+        # # Creating entry boxes
+        #
+        # self.username_box = Entry(New_Window)
+        # # self.username_box.place(relx=0.440, rely=0.298, height=20, relwidth=0.35)
+        # self.username_box.grid(row=1, column=3)
+        #
+        # self.password_box = Entry(New_Window)
+        # # self.password_box.place(relx=0.440, rely=0.468, height=20, relwidth=0.35)
+        # self.password_box.grid(row=2, column=3)
+        # self.password_box.configure(show="*")
+        # self.password_box.configure(background="white")
+        #
+        # self.first_name_box = Entry(New_Window)
+        # self.first_name_box.grid(row=3, column=3)
+        #
+        # self.surname_box = Entry(New_Window)
+        # self.surname_box.grid(row=4, column=3)
+        #
+        # self.cal = DateEntry(New_Window, width=17, bg="darkblue", fg="white", year=2010)
+        # self.cal.grid(row=5, column=3)
+        #
+        # self.wage_box = Entry(New_Window)
+        # self.wage_box.grid(row=6, column=3)
+        #
+        # # Creating checkbox
+        #
+        # # self.var = IntVar()
+        # # self.show_password = Checkbutton(New_Window)
+        # # self.show_password.place(relx=0.285, rely=0.650, relheight=0.100, relwidth=0.125)
+        # # self.show_password.configure(justify='left')
+        # # self.show_password.configure(text='''Show''')
+        # # self.show_password.configure(variable=self.var, command=self.cb)
+        #
+        # New_Window.mainloop()
+
+#=======================================================================================================================
+#======================================================REGISTRACE=======================================================
+#=======================================================================================================================
+
         # 5x TextBox (username, firstName, surname, password, wagePerHour)
         # 1x Button - submit
 

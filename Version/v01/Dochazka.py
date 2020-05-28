@@ -27,11 +27,14 @@ class Main_Win:
     def __init__(self, main_win=Tk()):  # This is my first change so i already initialize a Tk window inside the class
         self.main_win = main_win
         main_win.title("Docházkový systém MANDINEC - ")
+        main_win.protocol("WM_DELETE_WINDOW", self.event_X)
         main_win.geometry("700x500")
         main_win.minsize(700, 500)
         app = td.Example(qq, userId, nastup, isEmployer, main_win)
         #main_win.geometry("900x500+250+130")
 
+    def event_X(self):
+        exit()
 
     def mainloop_window(self):  # This is the class function that helps me to mainloop the window
         self.main_win.mainloop()
