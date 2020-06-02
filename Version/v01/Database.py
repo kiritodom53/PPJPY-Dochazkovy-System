@@ -124,6 +124,16 @@ def user_exist(conn, username):
         return False
     return True
 
+def check_pass(conn, passw):
+    print("db user")
+    cur = conn.cursor()
+    cur.execute("SELECT count(*) FROM users WHERE password=?", (passw,))
+
+    row = cur.fetchall()
+    if(row[0][0] == 0):
+        return False
+    return True
+
 
 def exist_timeIn(conn, id, date):
     cur = conn.cursor()
@@ -318,6 +328,14 @@ def create_presence_out(conn, project):
     sql = ''' UPDATE presence
                   SET timeOut = ?
                   WHERE date = ? AND userId = ?'''
+    cur = conn.cursor()
+    cur.execute(sql, project)
+    conn.commit()
+
+def change_password(conn, project):
+    sql = ''' UPDATE users
+                  SET password = ?
+                  WHERE userId = ?'''
     cur = conn.cursor()
     cur.execute(sql, project)
     conn.commit()
