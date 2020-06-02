@@ -5,7 +5,8 @@ import locale
 from datetime import datetime
 
 conn = None
-db_file = r"C:\Users\dom53\Documents\_workspace\____new_project_here\_python-project\DochazkovySystem\_files\dochazkadb.db"
+# db_file = r"C:\Users\dom53\Documents\_workspace\____new_project_here\_python-project\DochazkovySystem\_files\dochazkadb.db"
+db_file = r"Y:\_workspace\dochazkovysystemv2\_files\dochazkadb.db"
 
 
 def main():
@@ -218,7 +219,7 @@ def select_user_mzda(conn, id, date, month):
 
 def select_user_by_credentials(conn, username, password):
     cur = conn.cursor()
-    cur.execute("SELECT * FROM users WHERE username=? and password=?", (username,password))
+    cur.execute("SELECT * FROM users WHERE username=? and password=?", (username, password))
 
     row = cur.fetchall()
     print("login user is:")
