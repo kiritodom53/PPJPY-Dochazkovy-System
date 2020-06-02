@@ -1,6 +1,7 @@
 from tkinter import Tk, Text, BOTH, W, N, E, S, LEFT, END, Listbox, BooleanVar, Checkbutton, LabelFrame, Radiobutton, IntVar, Entry, Toplevel, font, messagebox
 from tkinter.ttk import Frame, Button, Label, Style, Combobox
 from tkcalendar import Calendar,DateEntry
+import Version.v01.Database as db
 
 class HireFrame(Frame):
     def __init__(self, root):
@@ -11,6 +12,7 @@ class HireFrame(Frame):
         root.minsize(450, 270)
         root.maxsize(450, 270)
         self.var = BooleanVar()
+        self.conn = db.create_connection()
         self.initUI()
 
     def registr(self):
@@ -20,8 +22,20 @@ class HireFrame(Frame):
         print(self.first_name_box.get())
         print(self.surname_box.get())
         print(self.cal.get())
+        print("okok")
         print(self.wage_box.get())
-        print(self.var.get())
+        if (db.user_exist(self.conn, self.username_box.get()) == False):
+            hire_user = (self.username_box.get(),
+                           self.password_box.get(),
+                           self.first_name_box.get(),
+                           self.surname_box.get(),
+                           "26.01.2019",
+                           int(self.wage_box.get()))
+            # h = ("q", "q", "q", "q", "26.01.2019", 53)
+            db.hire_user(self.conn, hire_user)
+        else:
+            print("Již je registrován uživatel")
+            messagebox.showwarning("Chyba zapsání příchodu!", "Již je registrován uživatel!")
 
     def initUI(self):
         self.popis_lbl = Label(self.root, text="Registrace zaměstnance:")
@@ -87,13 +101,3 @@ class HireFrame(Frame):
 
         self.wage_box = Entry(self.root)
         self.wage_box.grid(row=6, column=3)
-
-        # Creating checkbox
-        # self.var.set(True)
-        # ToDo: Dořešit proměnou pro zjistění checkbutton value
-        self.is_employer = Checkbutton(self.root)
-        # self.show_password.place(relx=0.285, rely=0.650, relheight=0.100, relwidth=0.125)
-        self.is_employer.grid(row=7, column=2, columnspan=2)
-        self.is_employer.configure(justify='left')
-        self.is_employer.configure(text='''Is employer''')
-        self.is_employer.configure(variable=self.var) # command=self.cb

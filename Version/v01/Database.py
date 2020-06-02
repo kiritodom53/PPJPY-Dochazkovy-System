@@ -114,6 +114,17 @@ def select_user_by_id(conn, id):
     # print(row)
     return row
 
+def user_exist(conn, username):
+    print("db user")
+    cur = conn.cursor()
+    cur.execute("SELECT count(*) FROM users WHERE username=?", (username,))
+
+    row = cur.fetchall()
+    if(row[0][0] == 0):
+        return False
+    return True
+
+
 def exist_timeIn(conn, id, date):
     cur = conn.cursor()
     cur.execute("SELECT count(*) FROM presence WHERE userId=? AND date=?", (id, date,))
@@ -275,6 +286,14 @@ def create_user(conn, project):
     """
     sql = ''' INSERT INTO users(username,password,firstName,surname,hireDate)
               VALUES(?,?,?,?,?) '''
+    cur = conn.cursor()
+    cur.execute(sql, project)
+    conn.commit()
+    #return cur.lastrowid
+
+def hire_user(conn, project):
+    sql = ''' INSERT INTO users(username,password,firstName,surname,hireDate,wagePerHour)
+              VALUES(?,?,?,?,?,?) '''
     cur = conn.cursor()
     cur.execute(sql, project)
     conn.commit()
