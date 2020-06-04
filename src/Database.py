@@ -7,13 +7,15 @@ from datetime import datetime
 
 conn = None
 # db_file = r"C:\Users\dom53\Documents\_workspace\____new_project_here\_python-project\DochazkovySystem\_files\dochazkadb.db"
-db_file = r"Y:\_workspace\dochazkovysystemv2\src\_files\dochazkadb2.db"
-ROOT_DIR = os.path.dirname(os.path.abspath(__file__)) + "\\_files\\dochazkadb2.db"
+# db_file = r"Y:\_workspace\dochazkovysystemv2\src\_files\dochazkadb2.db"
+db_file = os.path.dirname(os.path.abspath(__file__)) + "\\_files\\dochazkadb2.db"
 
+def create_database():
+    sqlite3.connect(db_file)
 
 def check_database():
     print("checking database")
-    return os.path.exists(ROOT_DIR)
+    return os.path.exists(db_file)
 
 def check_tables(conn, table):
     print("checking table " + table)
@@ -38,8 +40,40 @@ def check_table_data(conn, table):
         return True
     return False
 
-def main():
+def create_tables():
+    userTable = """ CREATE TABLE IF NOT EXISTS users (
+                                                userId INTEGER PRIMARY KEY not null,
+                                                username VARCHAR(255) not null,
+                                                password VARCHAR(255) not null,
+                                                firstName VARCHAR(255) not null,
+                                                surname VARCHAR(255) not null,
+                                                hireDate VARCHAR(10) not null,
+                                                wagePerHour INT NOT NULL DEFAULT 100,
+                                                isEmployer BOOLEAN NOT NULL DEFAULT 0
+                                            ); """
 
+    presenceTable = """ CREATE TABLE IF NOT EXISTS presence (
+                                                id INTEGER PRIMARY KEY not null,
+                                                timeIn VARCHAR(5) null,
+                                                timeOut VARCHAR(5) null,
+                                                date VARCHAR(10) not null,
+                                                userId int not null,
+                                                FOREIGN KEY (userId) REFERENCES users(userId)
+                                            ); """
+
+    conn = create_connection()
+    if conn is not None:
+        # create projects table
+        create_table(conn, userTable)
+        create_table(conn, presenceTable)
+
+        seed_data(conn)
+
+    else:
+        print("Error! cannot create the database connection.")
+
+def main():
+    pass
     # conn = None
     # try:
     #     conn = sqlite3.connect(db_file)
@@ -51,54 +85,54 @@ def main():
     #         conn.close()
 
 
-    userTable = """ CREATE TABLE IF NOT EXISTS users (
-                                            userId INTEGER PRIMARY KEY not null,
-                                            username VARCHAR(255) not null,
-                                            password VARCHAR(255) not null,
-                                            firstName VARCHAR(255) not null,
-                                            surname VARCHAR(255) not null,
-                                            hireDate VARCHAR(10) not null,
-                                            wagePerHour INT NOT NULL DEFAULT 100,
-                                            isEmployer BOOLEAN NOT NULL DEFAULT 0
-                                        ); """
-
-    presenceTable = """ CREATE TABLE IF NOT EXISTS presence (
-                                            id INTEGER PRIMARY KEY not null,
-                                            timeIn VARCHAR(5) null,
-                                            timeOut VARCHAR(5) null,
-                                            date VARCHAR(10) not null,
-                                            userId int not null,
-                                            FOREIGN KEY (userId) REFERENCES users(userId)
-                                        ); """
-
-    conn = create_connection()
-    if conn is not None:
-        # create projects table
-        create_table(conn, userTable)
-        create_table(conn, presenceTable)
-
-        # Insert data
-        # user1 = ('test', 'test', 'David', 'Mašek', '20.05.2020', 1)
-        # create_user(conn, user1)
-        # create_user(conn, user1)
-        # create_user(conn, user1)
-        # create_user(conn, user1)
-        # create_user(conn, user1)
-
-        # Update data
-        #update_user(conn, (120, 1))
-
-        # Delete data
-        #delete_user(conn, 2)
-
-        # Select data by id
-        #select_user_by_id(conn, 1)
-        # select_user_by_credentials(conn, 'dom53', 'admin')
-
-        seed_data(conn)
-
-    else:
-        print("Error! cannot create the database connection.")
+    # userTable = """ CREATE TABLE IF NOT EXISTS users (
+    #                                         userId INTEGER PRIMARY KEY not null,
+    #                                         username VARCHAR(255) not null,
+    #                                         password VARCHAR(255) not null,
+    #                                         firstName VARCHAR(255) not null,
+    #                                         surname VARCHAR(255) not null,
+    #                                         hireDate VARCHAR(10) not null,
+    #                                         wagePerHour INT NOT NULL DEFAULT 100,
+    #                                         isEmployer BOOLEAN NOT NULL DEFAULT 0
+    #                                     ); """
+    #
+    # presenceTable = """ CREATE TABLE IF NOT EXISTS presence (
+    #                                         id INTEGER PRIMARY KEY not null,
+    #                                         timeIn VARCHAR(5) null,
+    #                                         timeOut VARCHAR(5) null,
+    #                                         date VARCHAR(10) not null,
+    #                                         userId int not null,
+    #                                         FOREIGN KEY (userId) REFERENCES users(userId)
+    #                                     ); """
+    #
+    # conn = create_connection()
+    # if conn is not None:
+    #     # create projects table
+    #     create_table(conn, userTable)
+    #     create_table(conn, presenceTable)
+    #
+    #     # Insert data
+    #     # user1 = ('test', 'test', 'David', 'Mašek', '20.05.2020', 1)
+    #     # create_user(conn, user1)
+    #     # create_user(conn, user1)
+    #     # create_user(conn, user1)
+    #     # create_user(conn, user1)
+    #     # create_user(conn, user1)
+    #
+    #     # Update data
+    #     #update_user(conn, (120, 1))
+    #
+    #     # Delete data
+    #     #delete_user(conn, 2)
+    #
+    #     # Select data by id
+    #     #select_user_by_id(conn, 1)
+    #     # select_user_by_credentials(conn, 'dom53', 'admin')
+    #
+    #     seed_data(conn)
+    #
+    # else:
+    #     print("Error! cannot create the database connection.")
 
 
 def seed_data(connection):

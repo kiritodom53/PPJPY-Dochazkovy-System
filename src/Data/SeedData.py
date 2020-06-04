@@ -1,12 +1,16 @@
 import src.Database as db
 import json
+import os
 
-presence_json_file = r"C:\Users\dom53\Documents\_workspace\____new_project_here\_python-project\DochazkovySystem\_files\presence.json"
-presence_json_file2 = r"C:\Users\dom53\Documents\_workspace\____new_project_here\_python-project\DochazkovySystem\_files\pres2.json"
+presence_json_file = os.path.dirname(os.path.abspath(__file__)) + r"\presence.json"
+
+# presence_json_file = r"C:\Users\dom53\Documents\_workspace\____new_project_here\_python-project\DochazkovySystem\_files\presence.json"
+# presence_json_file2 = r"C:\Users\dom53\Documents\_workspace\____new_project_here\_python-project\DochazkovySystem\_files\pres2.json"
 
 def main():
+    print(presence_json_file)
     conn = db.create_connection()
-    # insert_presence(conn,read_json(presence_json_file))
+    insert_presence(conn,read_json(presence_json_file))
     # update_presence(conn,read_json(presence_json_file2))
     db.get_presence_groupby_year_by_id(conn, 1)
 
@@ -32,5 +36,5 @@ def read_json(path):
         # for p in data:
         #     print(p)
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()

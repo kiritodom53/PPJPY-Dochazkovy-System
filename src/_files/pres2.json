@@ -1,4 +1,5 @@
-[{"id":1,"datetime":"0:00","userId":1,"timeIn":"8:50","timeOut":"15:40"},
+[
+{"id":1,"datetime":"0:00","userId":1,"timeIn":"8:50","timeOut":"15:40"},
 {"id":2,"datetime":"0:00","userId":1,"timeIn":"8:44","timeOut":"20:56"},
 {"id":3,"datetime":"0:00","userId":1,"timeIn":"8:27","timeOut":"14:01"},
 {"id":4,"datetime":"0:00","userId":1,"timeIn":"7:02","timeOut":"19:46"},
