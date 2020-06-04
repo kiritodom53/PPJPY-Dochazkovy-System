@@ -1,4 +1,4 @@
-import Version.v01.Dochazka as dochazka
+import src.Dochazka as dochazka
 
 
 def main():

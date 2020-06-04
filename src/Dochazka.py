@@ -1,8 +1,8 @@
 from tkinter import Tk, Label, Button, messagebox
 from tkinter import *
-import Version.v01.DochazkaForm as td
-import Version.v01.Database as db
-import Version.v01.LoginForm as lg
+import src.DochazkaForm as td
+import src.Database as db
+import src.LoginForm as lg
 
 ##### Login Page #####
 

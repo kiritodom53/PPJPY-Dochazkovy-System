@@ -1,12 +1,12 @@
 import sqlite3
 from sqlite3 import Error
-import Version.v01.Validation.Helper as helper
+import src.Validation.Helper as helper
 import locale
 from datetime import datetime
 
 conn = None
 # db_file = r"C:\Users\dom53\Documents\_workspace\____new_project_here\_python-project\DochazkovySystem\_files\dochazkadb.db"
-db_file = r"Y:\_workspace\dochazkovysystemv2\_files\dochazkadb.db"
+db_file = r"Y:\_workspace\dochazkovysystemv2-2\_files\dochazkadb.db"
 
 
 def main():

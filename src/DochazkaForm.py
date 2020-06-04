@@ -1,10 +1,10 @@
 from tkinter import Tk, Text, BOTH, W, N, E, S, LEFT, END, Listbox, Checkbutton, LabelFrame, Radiobutton, IntVar, Entry, Toplevel, font, messagebox
 from tkinter.ttk import Frame, Button, Label, Style, Combobox
 from tkcalendar import Calendar,DateEntry
-import Version.v01.Database as db
-import Version.v01.Validation.Helper as helper
-import Version.v01.Hire as hire
-import Version.v01.Password as ps
+import src.Database as db
+import src.Validation.Helper as helper
+import src.Hire as hire
+import src.Password as ps
 from datetime import datetime
 import time
 # import Version.v01.TestForm as tf
