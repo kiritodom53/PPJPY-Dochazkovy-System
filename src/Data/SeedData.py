@@ -1,11 +1,19 @@
 import src.Database as db
 import json
 import os
+import urllib.request
 
-presence_json_file = os.path.dirname(os.path.abspath(__file__)) + r"\presence.json"
+presence_json_file = os.getcwd() + r"\presence.json"
 
 # presence_json_file = r"C:\Users\dom53\Documents\_workspace\____new_project_here\_python-project\DochazkovySystem\_files\presence.json"
 # presence_json_file2 = r"C:\Users\dom53\Documents\_workspace\____new_project_here\_python-project\DochazkovySystem\_files\pres2.json"
+# https://lide.uhk.cz/fim/student/mandido1/pythondochazka/presence.json
+url = 'https://lide.uhk.cz/fim/student/mandido1/pythondochazka/presence.json'
+# with urllib.request.urlopen(url) as url:
+#     s = url.read()
+urllib.request.urlretrieve(url, 'presence.json')
+
+# data = json.loads(response.read())
 
 def main():
     print(presence_json_file)

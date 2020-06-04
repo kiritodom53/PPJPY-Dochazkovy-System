@@ -4,14 +4,19 @@ import src.Validation.Helper as helper
 import locale
 import os
 from datetime import datetime
+from pathlib import Path
 
 conn = None
 # db_file = r"C:\Users\dom53\Documents\_workspace\____new_project_here\_python-project\DochazkovySystem\_files\dochazkadb.db"
 # db_file = r"Y:\_workspace\dochazkovysystemv2\src\_files\dochazkadb2.db"
-db_file = os.path.dirname(os.path.abspath(__file__)) + "\\_files\\dochazkadb2.db"
+# db_file = os.path.dirname(os.path.abspath(__file__)) + "\\_files\\dochazkadb2.db"
+db_file = os.getcwd() + "\\dochazkadb2.db"
 
 def create_database():
-    sqlite3.connect(db_file)
+    print(db_file)
+    print(os.getcwd())
+    Path(db_file).touch()
+    # sqlite3.connect(db_file)
 
 def check_database():
     print("checking database")
