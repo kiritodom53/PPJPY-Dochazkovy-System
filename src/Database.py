@@ -2,12 +2,41 @@ import sqlite3
 from sqlite3 import Error
 import src.Validation.Helper as helper
 import locale
+import os
 from datetime import datetime
 
 conn = None
 # db_file = r"C:\Users\dom53\Documents\_workspace\____new_project_here\_python-project\DochazkovySystem\_files\dochazkadb.db"
-db_file = r"Y:\_workspace\dochazkovysystemv2-2\_files\dochazkadb.db"
+db_file = r"Y:\_workspace\dochazkovysystemv2\src\_files\dochazkadb2.db"
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__)) + "\\_files\\dochazkadb2.db"
 
+
+def check_database():
+    print("checking database")
+    return os.path.exists(ROOT_DIR)
+
+def check_tables(conn, table):
+    print("checking table " + table)
+    # query = "SELECT name FROM sqlite_master WHERE type='table' AND name='{table_name}';"
+
+    cur = conn.cursor()
+    cur.execute("SELECT count(name) FROM sqlite_master WHERE type='table' AND name=?", (table,))
+
+    row = cur.fetchall()
+    if (row[0][0] == 0):
+        return False
+    return True
+
+def check_table_data(conn, table):
+
+    cur = conn.cursor()
+    cur.execute("SELECT count(*) FROM " + table)
+
+    row = cur.fetchall()
+    print("checking data from " + table + ": " + str(row[0][0]))
+    if(int(row[0][0]) > 0):
+        return True
+    return False
 
 def main():
 
@@ -20,6 +49,7 @@ def main():
     # finally:
     #     if conn:
     #         conn.close()
+
 
     userTable = """ CREATE TABLE IF NOT EXISTS users (
                                             userId INTEGER PRIMARY KEY not null,
