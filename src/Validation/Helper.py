@@ -1,8 +1,9 @@
 from datetime import datetime
 
+
 class Validation:
     @staticmethod
-    def month_to_number(x):
+    def month_to_number(x: str) -> str:
         """Convert month from text to 2d num format
 
         Args:
@@ -27,66 +28,73 @@ class Validation:
         }[x]
 
     @staticmethod
-    def date_convert(input):
-        """ Convert month from yyyy-mm-dd to dd.mm.yyyy format
+    def date_convert(date: str) -> str:
+        """Convert month from yyyy-mm-dd to dd.mm.yyyy format
         Args:
-            input (str): date in (yyyy-mm-dd) format
+            date (str): date in (yyyy-mm-dd) format
         Returns:
             str: Date in (dd.mm.yyy) format
 
         """
-        tempDate = input.split("-")
-        newDate = tempDate[2] + "." + tempDate[1] + "." + tempDate[0]
-        return newDate
+        temp_date = date.split("-")
+        new_date = temp_date[2] + "." + temp_date[1] + "." + temp_date[0]
+        return new_date
 
     @staticmethod
-    def time_covert(input):
-        """ Convert time to hh:mm format
+    def time_covert(time: str) -> str:
+        """Convert time to hh:mm format
         Args:
-            input (str): time
+            time (str): time
         Returns:
             str: time in hh:mm format
         """
-        tempTime = input.split(":")
-        newTime = ""
-        if (len(tempTime[0]) != 1):
-            newTime += tempTime[0]
+        temp_time = time.split(":")
+        new_time = ""
+        if len(temp_time[0]) != 1:
+            new_time += temp_time[0]
         else:
-            newTime += "0" + tempTime[0]
+            new_time += "0" + temp_time[0]
 
-        newTime += ":"
+        new_time += ":"
 
-        if (len(tempTime[1]) != 1):
-            newTime += tempTime[1]
+        if len(temp_time[1]) != 1:
+            new_time += temp_time[1]
         else:
-            newTime += "0" + tempTime[1]
+            new_time += "0" + temp_time[1]
 
-        print("ee")
-        print(newTime)
-
-        return newTime
+        return new_time
 
     @staticmethod
-    def pocet_hodin(time_1, time_2):
-        """ Calculates the time between two times
+    def number_of_hours(time_1: str, time_2: str) -> str:
+        """Calculates the time between two times
 
         Args:
             time_1 (str): first time
             time_2 (str): second time
 
         Returns:
-            str:
-
+            str: Worked hours
         """
-        format = '%H:%M'
-        date_x = datetime.strptime(Validation.time_covert(time_1), format) - datetime.strptime(Validation.time_covert(time_2), format)
-        string_x = str(date_x)
+        time_format: str = '%H:%M'
+        date_x = datetime.strptime(Validation.time_covert(time_1), time_format) - \
+                 datetime.strptime(Validation.time_covert(time_2), time_format)
+        string_x: str = str(date_x)
         string_x = string_x[:-3]
         return Validation.time_covert(string_x)
 
     @staticmethod
-    def number_to_time(hours, minutes):
-        m = str('{:02d}:{:02d}'.format(*divmod(minutes, 60))) # Minuty na na hh:mm
-        final_h = int(hours) + int(m.split(":")[0]) # Final hodiny
-        final = str(final_h) + ":" + str(int(m.split(":")[1]))
-        return final
+    def number_to_time(hours: int, minutes: int) -> str:
+        """Convert hours and minutes to hh:mm format
+
+        Args:
+            hours (int): hours
+            minutes (int): minutes
+
+        Returns:
+            str: Time in hh:mm format
+        """
+        m: str = str('{:02d}:{:02d}'.format(*divmod(minutes, 60)))  # Minutes to hh:mm
+        final_time: str = str(int(hours) + int(m.split(":")[0])) + ":" + m.split(":")[1]
+        # final_h: int = int(hours) + int(m.split(":")[0])  # Hours + hours from m
+        # final: str = str(final_h) + ":" + str(int(m.split(":")[1]))
+        return final_time

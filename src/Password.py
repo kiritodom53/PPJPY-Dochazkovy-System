@@ -1,10 +1,14 @@
-from tkinter import Tk, Text, BOTH, W, N, E, S, LEFT, END, Listbox, BooleanVar, Checkbutton, LabelFrame, Radiobutton, IntVar, Entry, Toplevel, font, messagebox
+from tkinter import Tk, Text, BOTH, W, N, E, S, LEFT, END, Listbox, BooleanVar, Checkbutton, LabelFrame, Radiobutton, \
+    IntVar, Entry, Toplevel, font, messagebox
 from tkinter.ttk import Frame, Button, Label, Style, Combobox
-from tkcalendar import Calendar,DateEntry
+from tkcalendar import Calendar, DateEntry
 import src.Database as db
 
+
 class PassFrame(Frame):
-    def __init__(self, root, user_id):
+    def __init__(self,
+                 root,
+                 user_id):
         super().__init__()
         self.root = root
         root.title("Hire")
@@ -15,7 +19,7 @@ class PassFrame(Frame):
         self.var = BooleanVar()
         self.conn = db.create_connection()
         print("toto -> " + str(self.user_id))
-        self.initUI()
+        self.__init_ui()
 
     def change_pass(self):
         print("reg")
@@ -25,9 +29,10 @@ class PassFrame(Frame):
         print("okok")
         print(self.new_password_box.get())
         print(len(self.new_password_box.get()))
-        if (len(self.new_password_box.get()) != 0 and len(self.old_password_box.get()) != 0 and len(self.new_again_password.get()) != 0 ):
+        if (len(self.new_password_box.get()) != 0 and len(self.old_password_box.get()) != 0 and len(
+                self.new_again_password.get()) != 0):
             print("no empty")
-            if (db.check_pass(self.conn, self.old_password_box.get()) is True):
+            if db.check_pass(self.conn, self.old_password_box.get()) is True:
                 print("check pass aprove")
                 if (self.new_password_box.get() == self.new_again_password.get()):
                     print("change")
@@ -43,7 +48,8 @@ class PassFrame(Frame):
         else:
             print("Hesla nesmí být prázdné")
             messagebox.showwarning("Chyba hesla!", "Hesla nesmí být prázdné!")
-    def initUI(self):
+
+    def __init_ui(self):
         self.popis_lbl = Label(self.root, text="Změna hesla:")
         self.popis_lbl.grid(row=0, column=1, pady=5)
 

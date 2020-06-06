@@ -13,9 +13,10 @@ class HireFrame(Frame):
         root.maxsize(450, 270)
         self.var = BooleanVar()
         self.conn = db.create_connection()
-        self.initUI()
+        self.__init_ui()
 
     def registr(self):
+        # Todo: Pŕidat dynamicky datum
         print("reg")
         print(self.username_box.get())
         print(self.password_box.get())
@@ -24,20 +25,15 @@ class HireFrame(Frame):
         print(self.cal.get())
         print("okok")
         print(self.wage_box.get())
-        if (db.user_exist(self.conn, self.username_box.get()) == False):
-            hire_user = (self.username_box.get(),
-                           self.password_box.get(),
-                           self.first_name_box.get(),
-                           self.surname_box.get(),
-                           "26.01.2019",
-                           int(self.wage_box.get()))
+        if not db.user_exist(self.conn, self.username_box.get()):
+            hire_user = (self.username_box.get(), self.password_box.get(), self.first_name_box.get(), self.surname_box.get(), "26.01.2019", int(self.wage_box.get()))
             # h = ("q", "q", "q", "q", "26.01.2019", 53)
             db.hire_user(self.conn, hire_user)
         else:
             print("Již je registrován uživatel")
             messagebox.showwarning("Chyba zapsání příchodu!", "Již je registrován uživatel!")
 
-    def initUI(self):
+    def __init_ui(self):
         self.popis_lbl = Label(self.root, text="Registrace zaměstnance:")
         self.popis_lbl.grid(row=0, column=1, pady=5)
 

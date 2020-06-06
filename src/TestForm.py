@@ -1,6 +1,6 @@
 from tkinter import Tk, Label, Button, messagebox
 from tkinter import *
-import src.DochazkaForm as td
+import src.Dochazka as td
 import src.Database as db
 
 ##### Login Page #####

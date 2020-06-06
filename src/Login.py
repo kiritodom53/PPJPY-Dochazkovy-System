@@ -1,6 +1,6 @@
 from tkinter import Tk, Label, Button, messagebox
 from tkinter import *
-import src.DochazkaForm as td
+import src.Dochazka as td
 import src.Database as db
 
 
@@ -18,10 +18,10 @@ class Login_Page:
 
         :type login: object
         """
-        self.userId = None
-        self.user = None
-        self.hire = None
-        self.isEmployer = None
+        self.user: str
+        self.userId: int
+        self.hire: str
+        self.isEmployer: int
         self.__login = login
         self.__login.protocol("WM_DELETE_WINDOW", self.__event_x)
         self.__login.title("Login - Docházkový systém MANDINEC 1.0")
@@ -104,6 +104,11 @@ class Login_Page:
         self.userId = row[0]
         self.hire = row[5]
         self.isEmployer = row[7]
+        print("tady typy")
+        print(type(self.user))
+        print(type(self.userId))
+        print(type(self.hire))
+        print(type(self.isEmployer))
         print("isEmployer")
         print(self.isEmployer)
 

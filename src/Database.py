@@ -269,7 +269,7 @@ def select_user_time(conn, id, date, month):
     cur.execute("SELECT timeIn, timeOut FROM presence WHERE userId= ? AND timeOut is not null AND date LIKE ? ORDER BY date", (id, date+'-'+convert_month+'%',))
     rows = cur.fetchall()
     for x in rows:
-        celkovy_cas = helper.Validation.pocet_hodin(x[1], x[0])
+        celkovy_cas = helper.Validation.number_of_hours(x[1], x[0])
         # print(celkovy_cas)
         h += int(celkovy_cas.split(":")[0])
         m += int(celkovy_cas.split(":")[1])
@@ -280,6 +280,11 @@ def select_user_time(conn, id, date, month):
     #print(helper.Validation.number_to_time(h, m))
     #print(celkovy_cas)
     # print(row)
+    print("--->")
+    print("h: " + str(h) + " - m: " + str(m))
+    print("final -> " + str(helper.Validation.number_to_time(h, m)))
+    print(type(h))
+    print(type(m))
     return helper.Validation.number_to_time(h, m)
 
 
