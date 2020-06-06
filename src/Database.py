@@ -78,6 +78,7 @@ def create_tables():
         print("Error! cannot create the database connection.")
 
 def main():
+
     pass
     # conn = None
     # try:
@@ -172,9 +173,12 @@ def get_presence_groupby_year_by_id(conn, id):
 def select_user_by_id(conn, id):
     """
     Query tasks by priority
-    :param conn: the Connection object
-    :param priority:
-    :return:
+    Args:
+        :param conn: the Connection object
+        :param priority:
+        :param (str): id
+    :returns
+        bool: Fkkoef.
     """
     cur = conn.cursor()
     cur.execute("SELECT * FROM users WHERE userId=?", (id,))

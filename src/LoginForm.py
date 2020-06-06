@@ -19,7 +19,7 @@ class Login_Page:
         :type login: object
         """
         self.login = login
-        login.protocol("WM_DELETE_WINDOW",self.event_X)
+        login.protocol("WM_DELETE_WINDOW", self.event_X)
         login.title("Login - Docházkový systém MANDINEC 1.0")
         login.geometry("450x230+450+170")
 

@@ -115,6 +115,8 @@ class Example(Frame):
         # print("mm: " + str(month))
         p_rows = db.select_presence_by_user_id(self.conn, self.user_id, year, month)
         for x in p_rows:
+            print("jeje")
+            print(x[1])
             vstup = helper.Validation.date_convert(x[3]) \
                     + " :: " \
                     + helper.Validation.time_covert(x[1]) \
