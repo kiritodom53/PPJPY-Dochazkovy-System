@@ -3,52 +3,56 @@ from tkinter import *
 import src.DochazkaForm as td
 import src.Database as db
 
+
 ##### Login Page #####
 
-qq = None
-userId = None
-hire = None
-isEmployer = None
+# qq = None
+# userId = None
+# hire = None
+# isEmployer = None
 
 class Login_Page:
-    uu = ""
 
     def __init__(self, login=Tk()):  # This is my first change so i already initialize a Tk window inside the class
         """
 
         :type login: object
         """
-        self.login = login
-        login.protocol("WM_DELETE_WINDOW", self.event_X)
-        login.title("Login - Docházkový systém MANDINEC 1.0")
-        login.geometry("450x230+450+170")
+        self.userId = None
+        self.user = None
+        self.hire = None
+        self.isEmployer = None
+        self.__login = login
+        self.__login.protocol("WM_DELETE_WINDOW", self.__event_x)
+        self.__login.title("Login - Docházkový systém MANDINEC 1.0")
+        self.__login.geometry("450x230+450+170")
+        self.__init_ui()
 
-    # Creating describtioneves
-
-        self.username = Label(login, text="Username:")
+    def __init_ui(self):
+        self.username = Label(self.__login, text="Username:")
         self.username.place(relx=0.285, rely=0.298, height=20, width=55)
 
-        self.password = Label(login, text="Password:")
+        self.password = Label(self.__login, text="Password:")
         self.password.place(relx=0.285, rely=0.468, height=20, width=55)
 
         # Creating Buttons
 
-        self.login_button = Button(login, text="Login")
+        self.login_button = Button(self.__login, text="Login")
         self.login_button.place(relx=0.440, rely=0.638, height=30, width=60)
         self.login_button.configure(command=self.login_user)
 
         self.login_completed = IntVar()
 
-        self.exit_button = Button(login, text="Exit")  # , command=master.quit)
+        self.exit_button = Button(self.__login, text="Exit")  # , command=master.quit)
         self.exit_button.place(relx=0.614, rely=0.638, height=30, width=60)
         self.exit_button.configure(command=self.exit_login)
 
         # Creating entry boxes
 
-        self.username_box = Entry(login)
+        self.username_box = Entry(self.__login)
         self.username_box.place(relx=0.440, rely=0.298, height=20, relwidth=0.35)
 
-        self.password_box = Entry(login)
+        self.password_box = Entry(self.__login)
         self.password_box.place(relx=0.440, rely=0.468, height=20, relwidth=0.35)
         self.password_box.configure(show="*")
         self.password_box.configure(background="white")
@@ -56,29 +60,28 @@ class Login_Page:
         # Creating checkbox
 
         self.var = IntVar()
-        self.show_password = Checkbutton(login)
+        self.show_password = Checkbutton(self.__login)
         self.show_password.place(relx=0.285, rely=0.650, relheight=0.100, relwidth=0.125)
         self.show_password.configure(justify='left')
         self.show_password.configure(text='''Show''')
-        self.show_password.configure(variable=self.var, command=self.cb)
+        self.show_password.configure(variable=self.var, command=self.__cb)
 
-    def event_X(self):
+    def __event_x(self):
         if messagebox.askokcancel("Exit", "Are you sure you want to exit?"):
             exit()
 
-    def cb(self, ):
+    def __cb(self, ):
         if self.var.get() == True:
             self.password_box.configure(show="")
         else:
             self.password_box.configure(show="*")
 
-
-# Giving function to login process
+    # Giving function to login process
 
     def login_user(self):
         name = self.username_box.get()
         password = self.password_box.get()
-        login_completed = self.login_completed.get()
+        # login_completed = self.login_completed.get()
 
         # AUTO DATA PRO TESTOVÁNÍ
         name = "dom53"
@@ -93,27 +96,26 @@ class Login_Page:
         print("password: " + password)
         print("row[1]: " + row[1])
         print("row[2]: " + row[2])
-        global qq
-        global userId
-        global hire
-        global isEmployer
-        qq = row[3] + " " + row[4]
-        userId = row[0]
-        hire = row[5]
-        isEmployer = row[7]
+        # global qq
+        # global userId
+        # global hire
+        # global isEmployer
+        self.user = row[3] + " " + row[4]
+        self.userId = row[0]
+        self.hire = row[5]
+        self.isEmployer = row[7]
         print("isEmployer")
-        print(isEmployer)
+        print(self.isEmployer)
 
-        #print ToDo: Hashovat heslo
+        # print ToDo: Hashovat heslo
         # Potom zapnout
         if name == row[1] and password == row[2]:
-            #Main_Win.setUzv(uu)
 
             # Potom zapnout
             # messagebox.showinfo("Login page", "Login successful!")
-            self.login.destroy()  # Removes the toplevel window
+            self.__login.destroy()  # Removes the toplevel window
             # self.main_win.deiconify() #Unhides the root window
-            self.login_completed == 1
+            # self.login_completed == 1
 
 
         # Potom zapnout
@@ -122,26 +124,31 @@ class Login_Page:
 
         # return
 
+    @property
     def get_user_id(self):
-        return userId
+        return self.userId
 
+    @property
     def get_user_name(self):
-        return qq
+        print("no co")
+        print(self.user)
+        return self.user
 
+    @property
     def get_hire_date(self):
-        return hire
+        return self.hire
 
+    @property
     def is_employer(self):
-        return isEmployer
+        return self.isEmployer
 
-    def hire_user(self):
-        print("hire user")
+    # def hire_user(self):
+    #     print("hire user")
 
     def exit_login(self):
         msg = messagebox.askyesno("Exit login page", "Do you really want to exit?")
         if (msg):
             exit()
 
-
     def mainloop_window(self):  # This is the class function that helps me to mainloop the window
-        self.login.mainloop()
+        self.__login.mainloop()

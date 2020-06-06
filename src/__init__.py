@@ -1,6 +1,6 @@
 import src.Data.SeedData as sd
 import src.Database as db
-import src.LoginForm as lg
+import src.Login as lg
 from tkinter import Tk
 import src.DochazkaForm as td
 
@@ -33,7 +33,7 @@ class Boot:
         self.startup_config()
         lp = self.login()
 
-        main_win = MainWin(lp.get_user_name(), lp.get_user_id(), lp.get_hire_date(), lp.is_employer())
+        main_win = MainWin(lp.get_user_name, lp.get_user_id, lp.get_hire_date, lp.is_employer)
         main_win.mainloop_window()
 
 

@@ -2,7 +2,7 @@ from tkinter import Tk, Label, Button, messagebox
 from tkinter import *
 import src.DochazkaForm as td
 import src.Database as db
-import src.LoginForm as lg
+import src.Login as lg
 
 ##### Login Page #####
 
@@ -12,7 +12,7 @@ userId = None
 login_page = lg.Login_Page()  # I dont need to pass the root now since its initialized inside the class
 login_page.mainloop_window()
 # Just mainlooping the authentication window
-userId = login_page.get_user_id()
+userId = login_page.get_user_id
 qq = login_page.get_user_name()
 nastup = login_page.get_hire_date()
 isEmployer = login_page.is_employer()
