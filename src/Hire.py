@@ -1,7 +1,9 @@
-from tkinter import Tk, Text, BOTH, W, N, E, S, LEFT, END, Listbox, BooleanVar, Checkbutton, LabelFrame, Radiobutton, IntVar, Entry, Toplevel, font, messagebox
+from tkinter import Tk, Text, BOTH, W, N, E, S, LEFT, END, Listbox, BooleanVar, Checkbutton, LabelFrame, Radiobutton, \
+    IntVar, Entry, Toplevel, font, messagebox
 from tkinter.ttk import Frame, Button, Label, Style, Combobox
-from tkcalendar import Calendar,DateEntry
+from tkcalendar import Calendar, DateEntry
 import src.Database as db
+
 
 class HireFrame(Frame):
     def __init__(self, root):
@@ -15,58 +17,83 @@ class HireFrame(Frame):
         self.conn = db.create_connection()
         self.__init_ui()
 
-    def registr(self):
-        # Todo: Pŕidat dynamicky datum
+    def registration(self):
+        # Todo: Přidat dynamický datum
         print("reg")
-        print(self.username_box.get())
-        print(self.password_box.get())
-        print(self.first_name_box.get())
-        print(self.surname_box.get())
-        print(self.cal.get())
+        print(self.__username_box.get())
+        print(self.__password_box.get())
+        print(self.__first_name_box.get())
+        print(self.__surname_box.get())
+        print(self.__cal.get())
         print("okok")
-        print(self.wage_box.get())
-        if not db.user_exist(self.conn, self.username_box.get()):
-            hire_user = (self.username_box.get(), self.password_box.get(), self.first_name_box.get(), self.surname_box.get(), "26.01.2019", int(self.wage_box.get()))
-            # h = ("q", "q", "q", "q", "26.01.2019", 53)
+        print(self.__wage_box.get())
+        if not db.user_exist(self.conn, self.__username_box.get()):
+            hire_user = (
+                self.__username_box.get(),
+                self.__password_box.get(),
+                self.__first_name_box.get(),
+                self.__surname_box.get(),
+                "26.01.2019", int(self.__wage_box.get()))
             db.hire_user(self.conn, hire_user)
         else:
             print("Již je registrován uživatel")
-            messagebox.showwarning("Chyba zapsání příchodu!", "Již je registrován uživatel!")
+            messagebox.showwarning("Chyba zapsání příchodu!",
+                                   "Již je registrován uživatel!")
 
     def __init_ui(self):
-        self.popis_lbl = Label(self.root, text="Registrace zaměstnance:")
-        self.popis_lbl.grid(row=0, column=1, pady=5)
+        lb_description = Label(self.root,
+                               text="Registrace zaměstnance:")
+        lb_description.grid(row=0,
+                            column=1,
+                            pady=5)
 
-        self.username = Label(self.root, text="Username:")
-        # self.username.place(relx=0.285, rely=0.298, height=20, width=60)
-        self.username.grid(row=1, column=2, pady=5)
+        lb_username = Label(self.root,
+                            text="Username:")
+        lb_username.grid(row=1,
+                         column=2,
+                         pady=5)
 
-        self.password = Label(self.root, text="Password:")
-        # self.password.place(relx=0.285, rely=0.468, height=20, width=60)
-        self.password.grid(row=2, column=2, pady=5)
+        lb_password = Label(self.root,
+                            text="Password:")
+        lb_password.grid(row=2,
+                         column=2,
+                         pady=5)
 
-        self.firstName = Label(self.root, text="Name:")
-        # self.firstName.place(relx=0.285, rely=0.638, height=20, width=60)
-        self.firstName.grid(row=3, column=2, pady=5)
+        lb_first_name = Label(self.root,
+                              text="Name:")
+        lb_first_name.grid(row=3,
+                           column=2,
+                           pady=5)
 
-        self.surname = Label(self.root, text="Surname:")
-        # self.surname.place(relx=0.285, rely=0.808, height=20, width=60)
-        self.surname.grid(row=4, column=2, pady=5)
+        lb_surname = Label(self.root,
+                           text="Surname:")
+        lb_surname.grid(row=4,
+                        column=2,
+                        pady=5)
 
-        self.hireDate = Label(self.root, text="Hire date:")
-        # self.hireDate.place(relx=0.285, rely=0.978, height=20, width=60)
-        self.hireDate.grid(row=5, column=2, pady=5)
+        lb_hire_date = Label(self.root,
+                             text="Hire date:")
+        lb_hire_date.grid(row=5,
+                          column=2,
+                          pady=5)
 
-        self.wagePerHour = Label(self.root, text="Wage /h:")
-        # self.surname.place(relx=0.285, rely=0.1148, height=20, width=60)
-        self.wagePerHour.grid(row=6, column=2, pady=5)
+        lb_wage_per_hour = Label(self.root,
+                                 text="Wage /h:")
+        lb_wage_per_hour.grid(row=6,
+                              column=2,
+                              pady=5)
 
         # Creating Buttons
 
-        self.hire_button = Button(self.root, text="Hire!", command=self.registr)
-        self.hire_button.grid(row=8, column=2, columnspan=2, pady=5)
-        # self.hire_button(relx=0.440, rely=0.638, height=30, width=60)
-        # self.hire_button.configure(command=self.login_user)
+        btn_hire = Button(self.root,
+                          text="Hire!",
+                          command=self.registration)
+        btn_hire.grid(row=8,
+                      pady=5,
+                      column=2,
+                      columnspan=2)
+        # btn_hire(relx=0.440, rely=0.638, height=30, width=60)
+        # btn_hire.configure(command=self.login_user)
         #
         # self.login_completed = IntVar()
         #
@@ -76,24 +103,33 @@ class HireFrame(Frame):
 
         # Creating entry boxes
 
-        self.username_box = Entry(self.root)
-        # self.username_box.place(relx=0.440, rely=0.298, height=20, relwidth=0.35)
-        self.username_box.grid(row=1, column=3)
+        self.__username_box = Entry(self.root)
+        # self.__username_box.place(relx=0.440, rely=0.298, height=20, relwidth=0.35)
+        self.__username_box.grid(row=1,
+                                 column=3)
 
-        self.password_box = Entry(self.root)
-        # self.password_box.place(relx=0.440, rely=0.468, height=20, relwidth=0.35)
-        self.password_box.grid(row=2, column=3)
-        self.password_box.configure(show="*")
-        self.password_box.configure(background="white")
+        self.__first_name_box = Entry(self.root)
+        self.__first_name_box.grid(row=3,
+                                   column=3)
 
-        self.first_name_box = Entry(self.root)
-        self.first_name_box.grid(row=3, column=3)
+        self.__surname_box = Entry(self.root)
+        self.__surname_box.grid(row=4,
+                                column=3)
 
-        self.surname_box = Entry(self.root)
-        self.surname_box.grid(row=4, column=3)
+        self.__password_box = Entry(self.root)
+        self.__password_box.grid(row=2,
+                                 column=3)
+        self.__password_box.configure(show="*")
+        self.__password_box.configure(background="white")
 
-        self.cal = DateEntry(self.root, width=17, bg="darkblue", fg="white", year=2010)
-        self.cal.grid(row=5, column=3)
+        self.__cal = DateEntry(self.root,
+                               width=17,
+                               bg="darkblue",
+                               fg="white",
+                               year=2010)
+        self.__cal.grid(row=5,
+                        column=3)
 
-        self.wage_box = Entry(self.root)
-        self.wage_box.grid(row=6, column=3)
+        self.__wage_box = Entry(self.root)
+        self.__wage_box.grid(row=6,
+                             column=3)

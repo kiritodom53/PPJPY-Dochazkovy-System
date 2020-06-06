@@ -1,32 +1,32 @@
-import src.Data.SeedData as sd
-import src.Database as db
-import src.Login as lg
+import src.Data.SeedData as seedData
+from src.Database import check_database, create_connection, create_database, check_tables, create_tables
+from src.Login import LoginPage
 from tkinter import Tk
-import src.Dochazka as td
+from src.Dochazka import AttendanceFrame
 
 
 def startup_config():
     print("STARTUP - CONFIG")
-    if not db.check_database():
-        print(db.check_database())
-        db.create_database()
+    if not check_database():
+        print(check_database())
+        create_database()
 
-    conn = db.create_connection()
-    users = db.check_tables(conn, "users")
-    presence = db.check_tables(conn, "presence")
+    conn = create_connection()
+    users = check_tables(conn, "users")
+    presence = check_tables(conn, "presence")
 
     # Vytvoří tabulky, pokud neexistují
     if users is False or presence is False:
         print("main")
-        db.create_tables()
+        create_tables()
         print("seed data - start")
-        sd.main()
+        seedData.main()
         print("seed data - end")
         print("start dochazka")
 
 
-def login():
-    login_page = lg.Login_Page()  # I dont need to pass the root now since its initialized inside the class
+def login() -> LoginPage:
+    login_page = LoginPage()  # I dont need to pass the root now since its initialized inside the class
     login_page.mainloop_window()
     return login_page
 
@@ -51,7 +51,7 @@ class MainWin:
         main_win.protocol("WM_DELETE_WINDOW", self.__event_x)
         main_win.geometry("700x500")
         main_win.minsize(700, 500)
-        app = td.Example(user, user_id, hire_date, is_employer, main_win)
+        AttendanceFrame(user, user_id, hire_date, is_employer, main_win)
 
     def __event_x(self):
         exit()

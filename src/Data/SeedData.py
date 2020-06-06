@@ -12,7 +12,8 @@ def main():
     print(__presence_json_file)
     conn = db.create_connection()
     __insert_presence(conn, __read_json(__presence_json_file))
-    db.get_presence_groupby_year_by_id(conn, 1)
+    db.get_presence_group_by_year_by_id(conn, 1)
+    # Todo: pořešit id
 
 
 def __insert_presence(conn, data):

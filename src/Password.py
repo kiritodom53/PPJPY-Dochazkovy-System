@@ -23,20 +23,20 @@ class PassFrame(Frame):
 
     def change_pass(self):
         print("reg")
-        print(self.old_password_box.get())
-        print(self.new_password_box.get())
-        print(self.new_again_password.get())
+        print(self.__old_password_box.get())
+        print(self.__new_password_box.get())
+        print(self.__new_again_password.get())
         print("okok")
-        print(self.new_password_box.get())
-        print(len(self.new_password_box.get()))
-        if (len(self.new_password_box.get()) != 0 and len(self.old_password_box.get()) != 0 and len(
-                self.new_again_password.get()) != 0):
+        print(self.__new_password_box.get())
+        print(len(self.__new_password_box.get()))
+        if (len(self.__new_password_box.get()) != 0 and len(self.__old_password_box.get()) != 0 and len(
+                self.__new_again_password.get()) != 0):
             print("no empty")
-            if db.check_pass(self.conn, self.old_password_box.get()) is True:
+            if db.check_pass(self.conn, self.__old_password_box.get()) is True:
                 print("check pass aprove")
-                if (self.new_password_box.get() == self.new_again_password.get()):
+                if self.__new_password_box.get() == self.__new_again_password.get():
                     print("change")
-                    change_pass = (self.new_password_box.get(), self.user_id)
+                    change_pass = (self.__new_password_box.get(), self.user_id)
                     db.change_password(self.conn, change_pass)
                 else:
                     print("Hesla se neshodují")
@@ -50,27 +50,27 @@ class PassFrame(Frame):
             messagebox.showwarning("Chyba hesla!", "Hesla nesmí být prázdné!")
 
     def __init_ui(self):
-        self.popis_lbl = Label(self.root, text="Změna hesla:")
-        self.popis_lbl.grid(row=0, column=1, pady=5)
+        lb_popis = Label(self.root, text="Změna hesla:")
+        lb_popis.grid(row=0, column=1, pady=5)
 
-        self.lbOldPass = Label(self.root, text="Staré heslo:")
+        lb_old_pass = Label(self.root, text="Staré heslo:")
         # self.username.place(relx=0.285, rely=0.298, height=20, width=60)
-        self.lbOldPass.grid(row=1, column=2, pady=5)
+        lb_old_pass.grid(row=1, column=2, pady=5)
 
-        self.lbNewPas = Label(self.root, text="Nové heslo:")
+        lb_new_pass = Label(self.root, text="Nové heslo:")
         # self.password.place(relx=0.285, rely=0.468, height=20, width=60)
-        self.lbNewPas.grid(row=2, column=2, pady=5)
+        lb_new_pass.grid(row=2, column=2, pady=5)
 
-        self.lbNewPasAgain = Label(self.root, text="Heslo znova:")
+        lb_new_pass_again = Label(self.root, text="Heslo znova:")
         # self.firstName.place(relx=0.285, rely=0.638, height=20, width=60)
-        self.lbNewPasAgain.grid(row=3, column=2, pady=5)
+        lb_new_pass_again.grid(row=3, column=2, pady=5)
 
         # Creating Buttons
 
-        self.hire_button = Button(self.root, text="Změnit heslo!", command=self.change_pass)
-        self.hire_button.grid(row=4, column=2, columnspan=2, pady=5)
-        # self.hire_button(relx=0.440, rely=0.638, height=30, width=60)
-        # self.hire_button.configure(command=self.login_user)
+        self.__btn_hire = Button(self.root, text="Změnit heslo!", command=self.change_pass)
+        self.__btn_hire.grid(row=4, column=2, columnspan=2, pady=5)
+        # self.__btn_hire(relx=0.440, rely=0.638, height=30, width=60)
+        # self.__btn_hire.configure(command=self.login_user)
         #
         # self.login_completed = IntVar()
         #
@@ -80,19 +80,19 @@ class PassFrame(Frame):
 
         # Creating entry boxes
 
-        self.old_password_box = Entry(self.root)
+        self.__old_password_box = Entry(self.root)
         # self.username_box.place(relx=0.440, rely=0.298, height=20, relwidth=0.35)
-        self.old_password_box.grid(row=1, column=3)
-        self.old_password_box.configure(show="*")
-        self.old_password_box.configure(background="white")
+        self.__old_password_box.grid(row=1, column=3)
+        self.__old_password_box.configure(show="*")
+        self.__old_password_box.configure(background="white")
 
-        self.new_password_box = Entry(self.root)
+        self.__new_password_box = Entry(self.root)
         # self.password_box.place(relx=0.440, rely=0.468, height=20, relwidth=0.35)
-        self.new_password_box.grid(row=2, column=3)
-        self.new_password_box.configure(show="*")
-        self.new_password_box.configure(background="white")
+        self.__new_password_box.grid(row=2, column=3)
+        self.__new_password_box.configure(show="*")
+        self.__new_password_box.configure(background="white")
 
-        self.new_again_password = Entry(self.root)
-        self.new_again_password.grid(row=3, column=3)
-        self.new_again_password.configure(show="*")
-        self.new_again_password.configure(background="white")
+        self.__new_again_password = Entry(self.root)
+        self.__new_again_password.grid(row=3, column=3)
+        self.__new_again_password.configure(show="*")
+        self.__new_again_password.configure(background="white")

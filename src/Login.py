@@ -11,7 +11,7 @@ import src.Database as db
 # hire = None
 # isEmployer = None
 
-class Login_Page:
+class LoginPage:
 
     def __init__(self, login=Tk()):  # This is my first change so i already initialize a Tk window inside the class
         """

@@ -6,11 +6,12 @@ import os
 from datetime import datetime
 from pathlib import Path
 
-conn = None
+# conn = None
 # db_file = r"C:\Users\dom53\Documents\_workspace\____new_project_here\_python-project\DochazkovySystem\_files\dochazkadb.db"
 # db_file = r"Y:\_workspace\dochazkovysystemv2\src\_files\dochazkadb2.db"
 # db_file = os.path.dirname(os.path.abspath(__file__)) + "\\_files\\dochazkadb2.db"
 db_file = os.getcwd() + "\\dochazkadb2.db"
+
 
 def create_database():
     print(db_file)
@@ -18,11 +19,13 @@ def create_database():
     Path(db_file).touch()
     # sqlite3.connect(db_file)
 
-def check_database():
+
+def check_database() -> bool:
     print("checking database")
     return os.path.exists(db_file)
 
-def check_tables(conn, table):
+
+def check_tables(conn: sqlite3.Connection, table: str) -> bool:
     print("checking table " + table)
     # query = "SELECT name FROM sqlite_master WHERE type='table' AND name='{table_name}';"
 
@@ -30,20 +33,21 @@ def check_tables(conn, table):
     cur.execute("SELECT count(name) FROM sqlite_master WHERE type='table' AND name=?", (table,))
 
     row = cur.fetchall()
-    if (row[0][0] == 0):
+    if row[0][0] == 0:
         return False
     return True
 
-def check_table_data(conn, table):
 
+def check_table_data(conn: sqlite3.Connection, table: str) -> bool:
     cur = conn.cursor()
     cur.execute("SELECT count(*) FROM " + table)
 
     row = cur.fetchall()
     print("checking data from " + table + ": " + str(row[0][0]))
-    if(int(row[0][0]) > 0):
+    if (int(row[0][0]) > 0):
         return True
     return False
+
 
 def create_tables():
     userTable = """ CREATE TABLE IF NOT EXISTS users (
@@ -77,8 +81,8 @@ def create_tables():
     else:
         print("Error! cannot create the database connection.")
 
-def main():
 
+def main():
     pass
     # conn = None
     # try:
@@ -89,7 +93,6 @@ def main():
     # finally:
     #     if conn:
     #         conn.close()
-
 
     # userTable = """ CREATE TABLE IF NOT EXISTS users (
     #                                         userId INTEGER PRIMARY KEY not null,
@@ -160,125 +163,126 @@ def seed_data(connection):
         create_user(connection, ('pjewise', 'admin', 'Paddy', 'Jewis', '04.01.2019'))
 
 
-def get_presence_groupby_year_by_id(conn, id):
+def get_presence_group_by_year_by_id(conn: sqlite3.Connection, user_id: int) -> list:
     cur = conn.cursor()
-    cur.execute("SELECT substr(date,1,4) FROM presence WHERE userId=? group by substr(date,1,4)", (id,))
+    cur.execute("SELECT substr(date,1,4) FROM presence WHERE userId=? group by substr(date,1,4)", (user_id,))
 
     rows = cur.fetchall()
 
     # for row in rows:
     #     print(row)
+    print("group")
+    print(type(rows))
     return rows
 
-def select_user_by_id(conn, id):
-    """
-    Query tasks by priority
-    Args:
-        :param conn: the Connection object
-        :param priority:
-        :param (str): id
-    :returns
-        bool: Fkkoef.
-    """
+
+def select_user_by_id(conn: sqlite3.Connection, user_id: int):
     cur = conn.cursor()
-    cur.execute("SELECT * FROM users WHERE userId=?", (id,))
+    cur.execute("SELECT * FROM users WHERE userId=?", (user_id,))
 
     row = cur.fetchall()
     # print(row)
     return row
 
-def user_exist(conn, username):
+
+def user_exist(conn: sqlite3.Connection, username: str) -> bool:
     print("db user")
     cur = conn.cursor()
     cur.execute("SELECT count(*) FROM users WHERE username=?", (username,))
 
     row = cur.fetchall()
-    if(row[0][0] == 0):
+    if row[0][0] == 0:
         return False
     return True
 
-def check_pass(conn, passw):
+
+def check_pass(conn: sqlite3.Connection, password: str) -> bool:
     print("db user")
     cur = conn.cursor()
-    cur.execute("SELECT count(*) FROM users WHERE password=?", (passw,))
+    cur.execute("SELECT count(*) FROM users WHERE password=?", (password,))
 
     row = cur.fetchall()
-    if(row[0][0] == 0):
+    if row[0][0] == 0:
         return False
     return True
 
 
-def exist_timeIn(conn, id, date):
+def exist_time_in(conn: sqlite3.Connection, user_id: int, date: str) -> bool:
     cur = conn.cursor()
-    cur.execute("SELECT count(*) FROM presence WHERE userId=? AND date=?", (id, date,))
+    cur.execute("SELECT count(*) FROM presence WHERE userId=? AND date=?", (user_id, date,))
 
     row = cur.fetchall()
-    if(row[0][0] == 0):
+    if row[0][0] == 0:
         return False
     return True
-    #return row
+    # return row
 
-def exist_timeOut(conn, id, date):
+
+def exist_timeOut(conn: sqlite3.Connection, user_id: int, date: str) -> bool:
     cur = conn.cursor()
-    cur.execute("SELECT count(*) FROM presence WHERE userId=? AND date=? AND timeOut IS NULL", (id, date,))
+    cur.execute("SELECT count(*) FROM presence WHERE userId=? AND date=? AND timeOut IS NULL", (user_id, date,))
 
     row = cur.fetchall()
     print(row[0][0])
-    if(row[0][0] == 1):
+    if row[0][0] == 1:
         return False
     return True
 
-def select_presence_by_user_id(conn, id, date, month):
 
+def select_presence_by_user_id(conn: sqlite3.Connection, user_id: int, date: str, month: str) -> list:
     cur = conn.cursor()
     print("iid: " + str(id))
     print("ddate: " + date)
     print("mmonth: " + month)
     convert_month = helper.Validation.month_to_number(month)
     print(convert_month)
-    mesic = date+'-'+convert_month+'%'
-    print(mesic)
-    cur.execute("SELECT * FROM presence WHERE userId= ? AND date LIKE ? ORDER BY date", (id, date+'-'+convert_month+'%',))
+    # mesic = date + '-' + convert_month + '%'
+    # print(mesic)
+    cur.execute("SELECT * FROM presence WHERE userId= ? AND date LIKE ? ORDER BY date",
+                (user_id, date + '-' + convert_month + '%',))
 
     rows = cur.fetchall()
     # print(row)
     return rows
 
-def select_user_day_count(conn, id, date, month):
+
+def select_user_day_count(conn: sqlite3.Connection, user_id: int, date: str, month: str) -> int:
     cur = conn.cursor()
     convert_month = helper.Validation.month_to_number(month)
     # print(convert_month)
     cur.execute(
         "SELECT count(*) FROM presence WHERE userId= ? AND timeOut is not null AND date LIKE ? ORDER BY date",
-        (id, date + '-' + convert_month + '%',))
+        (user_id, date + '-' + convert_month + '%',))
     row = cur.fetchall()
-
+    print("tp2")
+    print(type(row[0][0]))
     return row[0][0]
 
 
-def select_user_time(conn, id, date, month):
-
+def select_user_time(conn: sqlite3.Connection, user_id: int, date: str, month: str) -> str:
     cur = conn.cursor()
 
-    h = 0
-    m = 0
+    h: int = 0
+    m: int = 0
     convert_month = helper.Validation.month_to_number(month)
 
     # convert_month = helper.Validation.month_to_number(month)
     # print(convert_month)
-    cur.execute("SELECT timeIn, timeOut FROM presence WHERE userId= ? AND timeOut is not null AND date LIKE ? ORDER BY date", (id, date+'-'+convert_month+'%',))
-    rows = cur.fetchall()
+    cur.execute(
+        "SELECT timeIn, timeOut FROM presence WHERE userId= ? AND timeOut is not null AND date LIKE ? ORDER BY date",
+        (user_id, date + '-' + convert_month + '%',))
+    rows: list = cur.fetchall()
     for x in rows:
-        celkovy_cas = helper.Validation.number_of_hours(x[1], x[0])
+        final_time = helper.Validation.number_of_hours(x[1], x[0])
         # print(celkovy_cas)
-        h += int(celkovy_cas.split(":")[0])
-        m += int(celkovy_cas.split(":")[1])
+        h += int(final_time.split(":")[0])
+        m += int(final_time.split(":")[1])
 
     # print(h)
     # print(m)
     # t = '{:02d}:{:02d}'.format(*divmod(m, 60))
-    #print(helper.Validation.number_to_time(h, m))
-    #print(celkovy_cas)
+    # print(helper.Validation.number_to_time(h, m))
+    # print(celkovy_cas)
     # print(row)
     print("--->")
     print("h: " + str(h) + " - m: " + str(m))
@@ -288,56 +292,47 @@ def select_user_time(conn, id, date, month):
     return helper.Validation.number_to_time(h, m)
 
 
-def select_user_mzda(conn, id, date, month):
-    time = select_user_time(conn, id, date, month)
+def select_user_wage(conn: sqlite3.Connection, user_id: int, date: str, month: str) -> str:
+    time = select_user_time(conn, user_id, date, month)
 
     cur = conn.cursor()
-    cur.execute("SELECT wagePerHour FROM users WHERE userId= ?", (id,))
+    cur.execute("SELECT wagePerHour FROM users WHERE userId= ?", (user_id,))
     row = cur.fetchall()
     # print("time: " + time + ", mzda: " + str(row[0]))
-
 
     t = time
     (h, m) = t.split(':')
     result = int(h) * 3600 + int(m) * 60
     final_hours = result / 60 / 60
-    # print(str(int(final_hours) * float(row[0])) + ",-Kč")
-    mzda = row[0]
-    # print("minutes: ", result)
-    # print("hodiny: ", final_hours)
-    # print("mzda: ", row[0][0])
-    # print(float(final_hours) * float(row[0][0]))
-    celkova_mzda = float(final_hours) * float(row[0][0])
+    # mzda = row[0]
+    final_wage: float = float(final_hours) * float(row[0][0])
 
     locale.setlocale(locale.LC_ALL, '')
-    mzd = locale.currency(round(celkova_mzda, 2), grouping=True)
+    mzd = locale.currency(round(final_wage, 2), grouping=True)
 
     return str(mzd)
-    #return float(final_hours) * float(row[0])
+    # return float(final_hours) * float(row[0])
 
 
-def select_user_by_credentials(conn, username, password):
+def select_user_by_credentials(conn: sqlite3.Connection, username: str, password: str) -> list:
     cur = conn.cursor()
     cur.execute("SELECT * FROM users WHERE username=? and password=?", (username, password))
 
     row = cur.fetchall()
     print("login user is:")
+    print(type(row))
     print(row)
     return row
 
-def delete_user(conn, id):
-    """
-    Delete a task by task id
-    :param conn:  Connection to the SQLite database
-    :param id: id of the task
-    :return:
-    """
+
+def delete_user(conn: sqlite3.Connection, user_id: int):
     sql = 'DELETE FROM users WHERE userId=?'
     cur = conn.cursor()
-    cur.execute(sql, (id,))
+    cur.execute(sql, (user_id,))
     conn.commit()
 
-def update_user(conn, task):
+
+def update_user(conn: sqlite3.Connection, task: tuple):
     """
     update priority, begin_date, and end date of a task
     :param conn:
@@ -351,7 +346,8 @@ def update_user(conn, task):
     cur.execute(sql, task)
     conn.commit()
 
-def update_presence(conn, task):
+
+def update_presence(conn: sqlite3.Connection, task: tuple):
     """
     update priority, begin_date, and end date of a task
     :param conn:
@@ -365,7 +361,8 @@ def update_presence(conn, task):
     cur.execute(sql, task)
     conn.commit()
 
-def create_user(conn, project):
+
+def create_user(conn: sqlite3.Connection, project: tuple):
     """
     Create a new project into the projects table
     :param conn:
@@ -377,32 +374,35 @@ def create_user(conn, project):
     cur = conn.cursor()
     cur.execute(sql, project)
     conn.commit()
-    #return cur.lastrowid
+    # return cur.lastrowid
 
-def hire_user(conn, project):
+
+def hire_user(conn: sqlite3.Connection, project: tuple):
     sql = ''' INSERT INTO users(username,password,firstName,surname,hireDate,wagePerHour)
               VALUES(?,?,?,?,?,?) '''
     cur = conn.cursor()
     cur.execute(sql, project)
     conn.commit()
-    #return cur.lastrowid
+    # return cur.lastrowid
 
 
-def create_presence(conn, project):
+def create_presence(conn: sqlite3.Connection, project: tuple):
     sql = ''' INSERT INTO presence(id,timeIn,timeOut,date,userId)
               VALUES(?,?,?,?,?) '''
     cur = conn.cursor()
     cur.execute(sql, project)
     conn.commit()
 
-def create_presence_in(conn, project):
+
+def create_presence_in(conn: sqlite3.Connection, project: tuple):
     sql = ''' INSERT INTO presence(timeIn,date,userId)
               VALUES(?,?,?) '''
     cur = conn.cursor()
     cur.execute(sql, project)
     conn.commit()
 
-def create_presence_out(conn, project):
+
+def create_presence_out(conn: sqlite3.Connection, project: tuple):
     sql = ''' UPDATE presence
                   SET timeOut = ?
                   WHERE date = ? AND userId = ?'''
@@ -410,7 +410,10 @@ def create_presence_out(conn, project):
     cur.execute(sql, project)
     conn.commit()
 
-def change_password(conn, project):
+
+def change_password(conn: sqlite3.Connection, project: tuple):
+    print("change type")
+    print(type(project))
     sql = ''' UPDATE users
                   SET password = ?
                   WHERE userId = ?'''
@@ -419,7 +422,7 @@ def change_password(conn, project):
     conn.commit()
 
 
-def create_table(conn, create_table_sql):
+def create_table(conn: sqlite3.Connection, create_table_sql):
     """ create a table from the create_table_sql statement
     :param conn: Connection object
     :param create_table_sql: a CREATE TABLE statement
@@ -431,11 +434,13 @@ def create_table(conn, create_table_sql):
     except Error as e:
         print(e)
 
+
 def create_connection():
-    """ create a database connection to the SQLite database
+    """Create a database connection to the SQLite database
         specified by db_file
-    :param db_file: database file
-    :return: Connection object or None
+
+    Returns: Open connection to the database file or None
+
     """
     conn = None
     try:
@@ -443,6 +448,7 @@ def create_connection():
         return conn
     except Error as e:
         print(e)
+        # raise Error
 
     return conn
 
