@@ -12,7 +12,7 @@ userId = None
 login_page = lg.Login_Page()  # I dont need to pass the root now since its initialized inside the class
 login_page.mainloop_window()
 # Just mainlooping the authentication window
-userId = login_page.get_user()
+userId = login_page.get_user_id()
 qq = login_page.get_user_name()
 nastup = login_page.get_hire_date()
 isEmployer = login_page.is_employer()

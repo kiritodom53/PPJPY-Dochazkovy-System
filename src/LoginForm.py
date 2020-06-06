@@ -122,7 +122,7 @@ class Login_Page:
 
         # return
 
-    def get_user(self):
+    def get_user_id(self):
         return userId
 
     def get_user_name(self):
