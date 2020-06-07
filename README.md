@@ -6,7 +6,12 @@ Aplikace funguje jako jednoduchý docházkový systém pro zaměstanance.
 Gui je tvořeno pomocí tkinter
 Aplikace psána v prostředí [PyCharm](https://www.jetbrains.com/pycharm/)
 
-![alt samplpe image](https://i.imgur.com/lCe8R3T.png)
+#### Testovací uživatelé
+username:heslo
+- user1:admin   - zaměstnavatel
+- user2:admin   - zaměstnanec
+
+![alt samplpe project image](https://i.imgur.com/lCe8R3T.png)
 
 #### Hlavní funkce:
 - Evidování příchodu a odchodu za každý měsíc
