@@ -20,8 +20,8 @@ username:heslo
 - Výpis počet odpracovaných hodin
 
 #### Dodatečné funkce
-- Možnost změna hesla
-- Registrace nového zaměstnance (pouze pro zaměstnavatele)
+- Možnost změna hesla (zaměstnanec)
+- Registrace nového zaměstnance (zaměstnavatel)
 
 #### Použité knihovny
 - json
