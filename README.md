@@ -4,6 +4,7 @@
 Jedná se o databázovou aplikaci v pythonu.
 Aplikace funguje jako jednoduchý docházkový systém pro zaměstanance.
 Gui je tvořeno pomocí tkinter
+Aplikace psána v prostředí [PyCharm](https://www.jetbrains.com/pycharm/)
 
 ![alt samplpe image](https://i.imgur.com/lCe8R3T.png)
 

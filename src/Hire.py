@@ -2,6 +2,7 @@ from tkinter import BooleanVar, Entry,  messagebox
 from tkinter.ttk import Frame, Button, Label
 from tkcalendar import DateEntry
 import src.Database as db
+import src.Validation.Helper as helper
 
 
 class HireFrame(Frame):
@@ -31,10 +32,11 @@ class HireFrame(Frame):
         if not db.user_exist(self.conn, self.__username_box.get()):
             hire_user = (
                 self.__username_box.get(),
-                self.__password_box.get(),
+                helper.Validation.hash_password(self.__password_box.get()),
                 self.__first_name_box.get(),
                 self.__surname_box.get(),
                 "26.01.2019", int(self.__wage_box.get()))
+
             db.hire_user(self.conn, hire_user)
         else:
             print("Již je registrován uživatel")

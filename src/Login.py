@@ -78,9 +78,8 @@ class LoginPage:
         # login_completed = self.login_completed.get()
 
         # AUTO DATA PRO TESTOVÁNÍ
-        name = "dom53"
-        password = "admin"
-        # password = helper.Validation.verify_password(provided_password=)
+        # name = "dom53"
+        # password = "admin"
 
         conn = db.create_connection()
         # us = db.select_user_by_id(conn, 1)
