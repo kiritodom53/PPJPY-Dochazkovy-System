@@ -2,9 +2,10 @@
 
 ### Popis
 Jedná se o databázovou aplikaci v pythonu.
-Aplikace funguje jako jednoduchý docházkový systém pro zaměstanance.
-Gui je tvořeno pomocí tkinter
-Aplikace psána v prostředí [PyCharm](https://www.jetbrains.com/pycharm/)
+<br>Aplikace funguje jako jednoduchý docházkový systém pro zaměstanance.
+<br>Gui je tvořeno pomocí tkinter
+<br>Aplikace psána v prostředí [PyCharm](https://www.jetbrains.com/pycharm/)
+<br>Vytvořene v pythonu verz 3.7
 
 #### Testovací uživatelé
 username:heslo
