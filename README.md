@@ -5,6 +5,8 @@ Jedná se o databázovou aplikaci v pythonu.
 Aplikace funguje jako jednoduchý docházkový systém pro zaměstanance.
 Gui je tvořeno pomocí tkinter
 
+![alt samplpe image](https://i.imgur.com/lCe8R3T.png)
+
 #### Hlavní funkce:
 - Evidování příchodu a odchodu za každý měsíc
 - Výpis počet odpraovaných dnů
