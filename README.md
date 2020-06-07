@@ -15,7 +15,7 @@ username:heslo
 
 #### Hlavní funkce:
 - Evidování příchodu a odchodu za každý měsíc
-- Výpis počet odpraovaných dnů
+- Výpis počet odpracovaných dnů
 - Výpis celkové hrubé mzdy
 - Výpis počet odpracovaných hodin
 
@@ -62,6 +62,23 @@ dochazkovysystemv2
 └── README.md
 ```
 
+#### Popis tříd
+- [Helper.py](Helper.py)
+    - Pomocná střída se statickýma metodama
+- SeedData.py
+    - Seed dat do databáze
+- __init__.py
+    - Boot třída pro spuštění projetku
+- Database.py
+    - Veškeré oprace prováděně s databází
+- Dochazka.py
+    - Okno "aplikace" docházky
+- Hire.py
+    - Okno "aplikace" registrace uživatele
+- Login.py
+    - Okno "aplikace" přihlášení uživatele
+- Password.py
+    - Okno "aplikace" změny hesla
 
 ### v0.1
 
