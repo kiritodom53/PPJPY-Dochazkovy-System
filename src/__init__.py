@@ -3,6 +3,7 @@ from src.Database import check_database, create_connection, create_database, che
 from src.Login import LoginPage
 from tkinter import Tk
 from src.Dochazka import AttendanceFrame
+from sys import exit
 
 
 def startup_config():
