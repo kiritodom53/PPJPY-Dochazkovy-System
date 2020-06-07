@@ -63,21 +63,21 @@ dochazkovysystemv2
 ```
 
 #### Popis tříd
-- [Helper.py](Helper.py)
+- [Helper.py](src/Validation/Helper.py)
     - Pomocná střída se statickýma metodama
-- SeedData.py
+- [SeedData.py](src/Data/SeedData.py)
     - Seed dat do databáze
-- __init__.py
+- [__init__.py](src/__init__.py)
     - Boot třída pro spuštění projetku
-- Database.py
+- [Database.py](src/Database.py)
     - Veškeré oprace prováděně s databází
-- Dochazka.py
+- [Dochazka.py](src/Dochazka.py)
     - Okno "aplikace" docházky
-- Hire.py
+- [Hire.py](src/Hire.py)
     - Okno "aplikace" registrace uživatele
-- Login.py
+- [Login.py](src/Login.py)
     - Okno "aplikace" přihlášení uživatele
-- Password.py
+- [Password.py](src/Password.py)
     - Okno "aplikace" změny hesla
 
 ### v0.1
