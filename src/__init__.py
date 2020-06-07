@@ -6,6 +6,8 @@ from src.Dochazka import AttendanceFrame
 
 
 def startup_config():
+    """Startup database configurations
+    """
     print("STARTUP - CONFIG")
     if not check_database():
         print(check_database())
@@ -45,9 +47,17 @@ class MainWin:
                  user_id,
                  hire_date,
                  is_employer):
+        """
+
+        Args:
+            user: User full name
+            user_id: user id
+            hire_date: hire date
+            is_employer: if user is employer
+        """
         main_win = Tk()
         self.main_win = main_win
-        main_win.title("Docházkový systém MANDINEC - ")
+        main_win.title("Docházkový systém MANDINEC 1.0 - " + user)
         main_win.protocol("WM_DELETE_WINDOW", self.__event_x)
         main_win.geometry("700x500")
         main_win.minsize(700, 500)
@@ -56,7 +66,9 @@ class MainWin:
     def __event_x(self):
         exit()
 
-    def mainloop_window(self):  # This is the class function that helps me to mainloop the window
+    def mainloop_window(self):
+        """Function that helps me to mainloop the window
+        """
         self.main_win.mainloop()
 
 

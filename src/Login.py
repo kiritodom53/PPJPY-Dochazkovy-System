@@ -1,25 +1,14 @@
-from tkinter import Tk, Label, Button, messagebox
-from tkinter import *
-import src.Dochazka as td
+from tkinter import Tk, Label, Button, Entry, IntVar, Checkbutton, messagebox
 import src.Database as db
-
-
-##### Login Page #####
-
-# qq = None
-# userId = None
-# hire = None
-# isEmployer = None
 
 class LoginPage:
 
     def __init__(self, login=Tk()):  # This is my first change so i already initialize a Tk window inside the class
         """
-
         :type login: object
         """
         self.user: str
-        self.userId: int
+        self.user_id: int
         self.hire: str
         self.isEmployer: int
         self.__login = login
@@ -29,13 +18,13 @@ class LoginPage:
         self.__init_ui()
 
     def __init_ui(self):
+        """Create graphic interface
+        """
         self.username = Label(self.__login, text="Username:")
         self.username.place(relx=0.285, rely=0.298, height=20, width=55)
 
         self.password = Label(self.__login, text="Password:")
         self.password.place(relx=0.285, rely=0.468, height=20, width=55)
-
-        # Creating Buttons
 
         self.login_button = Button(self.__login, text="Login")
         self.login_button.place(relx=0.440, rely=0.638, height=30, width=60)
@@ -47,8 +36,6 @@ class LoginPage:
         self.exit_button.place(relx=0.614, rely=0.638, height=30, width=60)
         self.exit_button.configure(command=self.exit_login)
 
-        # Creating entry boxes
-
         self.username_box = Entry(self.__login)
         self.username_box.place(relx=0.440, rely=0.298, height=20, relwidth=0.35)
 
@@ -56,8 +43,6 @@ class LoginPage:
         self.password_box.place(relx=0.440, rely=0.468, height=20, relwidth=0.35)
         self.password_box.configure(show="*")
         self.password_box.configure(background="white")
-
-        # Creating checkbox
 
         self.var = IntVar()
         self.show_password = Checkbutton(self.__login)
@@ -71,7 +56,7 @@ class LoginPage:
             exit()
 
     def __cb(self, ):
-        if self.var.get() == True:
+        if self.var.get():
             self.password_box.configure(show="")
         else:
             self.password_box.configure(show="*")
@@ -79,6 +64,8 @@ class LoginPage:
     # Giving function to login process
 
     def login_user(self):
+        """Login user
+        """
         name = self.username_box.get()
         password = self.password_box.get()
         # login_completed = self.login_completed.get()
@@ -101,12 +88,12 @@ class LoginPage:
         # global hire
         # global isEmployer
         self.user = row[3] + " " + row[4]
-        self.userId = row[0]
+        self.user_id = row[0]
         self.hire = row[5]
         self.isEmployer = row[7]
         print("tady typy")
         print(type(self.user))
-        print(type(self.userId))
+        print(type(self.user_id))
         print(type(self.hire))
         print(type(self.isEmployer))
         print("isEmployer")
@@ -130,21 +117,37 @@ class LoginPage:
         # return
 
     @property
-    def get_user_id(self):
-        return self.userId
+    def get_user_id(self) -> int:
+        """Return user id
+        Returns:
+            user id
+        """
+        return self.user_id
 
     @property
-    def get_user_name(self):
+    def get_user_name(self) -> str:
+        """Return username
+        Returns:
+            username
+        """
         print("no co")
         print(self.user)
         return self.user
 
     @property
-    def get_hire_date(self):
+    def get_hire_date(self) -> str:
+        """Return hire date
+        Returns:
+            hire date
+        """
         return self.hire
 
     @property
-    def is_employer(self):
+    def is_employer(self) -> int:
+        """Return if user is employer
+        Returns:
+            True if user is employer otherwise False
+        """
         return self.isEmployer
 
     # def hire_user(self):
@@ -152,8 +155,10 @@ class LoginPage:
 
     def exit_login(self):
         msg = messagebox.askyesno("Exit login page", "Do you really want to exit?")
-        if (msg):
+        if msg:
             exit()
 
-    def mainloop_window(self):  # This is the class function that helps me to mainloop the window
+    def mainloop_window(self):
+        """Function that helps me to mainloop the window
+        """
         self.__login.mainloop()

@@ -1,7 +1,6 @@
-from tkinter import Tk, Text, BOTH, W, N, E, S, LEFT, END, Listbox, BooleanVar, Checkbutton, LabelFrame, Radiobutton, \
-    IntVar, Entry, Toplevel, font, messagebox
-from tkinter.ttk import Frame, Button, Label, Style, Combobox
-from tkcalendar import Calendar, DateEntry
+from tkinter import BooleanVar, Entry,  messagebox
+from tkinter.ttk import Frame, Button, Label
+from tkcalendar import DateEntry
 import src.Database as db
 
 
@@ -18,6 +17,8 @@ class HireFrame(Frame):
         self.__init_ui()
 
     def registration(self):
+        """New employee registration
+        """
         # Todo: Přidat dynamický datum
         print("reg")
         print(self.__username_box.get())
@@ -41,6 +42,8 @@ class HireFrame(Frame):
                                    "Již je registrován uživatel!")
 
     def __init_ui(self):
+        """Create graphic interface
+        """
         lb_description = Label(self.root,
                                text="Registrace zaměstnance:")
         lb_description.grid(row=0,
@@ -92,19 +95,8 @@ class HireFrame(Frame):
                       pady=5,
                       column=2,
                       columnspan=2)
-        # btn_hire(relx=0.440, rely=0.638, height=30, width=60)
-        # btn_hire.configure(command=self.login_user)
-        #
-        # self.login_completed = IntVar()
-        #
-        # self.exit_button = Button(self.root, text="Exit")  # , command=master.quit)
-        # self.exit_button.place(relx=0.614, rely=0.638, height=30, width=60)
-        # self.exit_button.configure(command=self.exit_login)
-
-        # Creating entry boxes
 
         self.__username_box = Entry(self.root)
-        # self.__username_box.place(relx=0.440, rely=0.298, height=20, relwidth=0.35)
         self.__username_box.grid(row=1,
                                  column=3)
 

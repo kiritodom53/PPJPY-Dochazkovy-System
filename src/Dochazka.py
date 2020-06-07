@@ -1,19 +1,11 @@
-from tkinter import Tk, Text, BOTH, W, N, E, S, LEFT, END, Listbox, Checkbutton, LabelFrame, Radiobutton, IntVar, Entry, \
-    Toplevel, font, messagebox
-from tkinter.ttk import Frame, Button, Label, Style, Combobox
-from tkcalendar import Calendar, DateEntry
+from tkinter import Tk, BOTH, W, N, E, S, END, Listbox, LabelFrame, Radiobutton, IntVar, messagebox
+from tkinter.ttk import Frame, Button, Label, Combobox
 import src.Database as db
 import src.Validation.Helper as helper
 import src.Hire as hire
 import src.Password as ps
 from datetime import datetime
-import time
 
-
-# import Version.v01.TestForm as tf
-
-
-# Tk, Text, BOTH, W, N, E, S, Listbox, LabelFrame, Radiobutton, IntVar
 
 def hire_form():
     print("test")
@@ -54,17 +46,17 @@ class AttendanceFrame(Frame):
         self.__init_ui()
         self.__btn_update_event()
 
-    # =======================================================================================================================
-    # ======================================================REGISTRACE=======================================================
-    # =======================================================================================================================
-
     def change_password_form(self):
+        """Open change password form
+        """
         print("change_password")
         pass_win = Tk()
         pass_form = ps.PassFrame(pass_win, self.user_id)
         pass_form.mainloop()
 
     def btn_entry_event(self):
+        """Button event - entry presence
+        """
         date_now: str = datetime.today().strftime('%Y-%m-%d')
 
         time_now: str = datetime.today().strftime('%H:%M')
@@ -85,7 +77,7 @@ class AttendanceFrame(Frame):
         else:
             print(entry)
             if db.exist_time_in(self.__conn, self.user_id, date_now):
-                if not db.exist_timeOut(self.__conn, self.user_id, date_now):
+                if not db.exist_time_out(self.__conn, self.user_id, date_now):
                     presence_out = (time_now, date_now, self.user_id)
                     db.create_presence_out(self.__conn, presence_out)
                 else:
@@ -99,7 +91,9 @@ class AttendanceFrame(Frame):
         self.__btn_update_event()
 
     def __btn_update_event(self):
-        user_years: list = self.get_update_mesic_cb
+        """Button event - update user presence in listbox
+        """
+        user_years: list = self.get_update_month_cb
         self.__cb_year["values"] = user_years
         print("__btn_update_event")
         print(self.user_id)
@@ -130,6 +124,8 @@ class AttendanceFrame(Frame):
             db.select_user_day_count(self.__conn, self.user_id, year, month))
 
     def clear(self):
+        """Clear user data from interface
+        """
         self.__lb_data.delete(0, END)
         self.__lb_time["text"] = self.__default_time + "0:0"
         self.__lb_wage["text"] = self.__default_wage + "0,00 Kč"
@@ -137,24 +133,40 @@ class AttendanceFrame(Frame):
 
     @property
     def get_year(self) -> str:
+        """Return year
+        Returns:
+            str: year
+        """
         return self.__cb_year.get()
 
     @property
     def get_month(self) -> str:
+        """Return month
+        Returns:
+            str: month
+        """
         return self.__cb_month.get()
 
     def cb_month_update(self, event):
+        """Update data on change
+        """
         self.__btn_update_event()
         temp = self.__cb_month.get()
         print(temp)
 
     def cb_year_update(self, event):
+        """Update data on change
+        """
         self.__btn_update_event()
         temp = self.__cb_year.get()
         print(temp)
 
     @property
-    def get_update_mesic_cb(self) -> list:
+    def get_update_month_cb(self) -> list:
+        """Return user years
+        Returns:
+            list: user years
+        """
         user_years = list()
 
         print("userId: " + str(self.user_id))
@@ -174,7 +186,8 @@ class AttendanceFrame(Frame):
         return user_years
 
     def __init_ui(self):
-        # self.master.title("Docházkový systém")
+        """Create graphic interface
+        """
         self.pack(fill=BOTH, expand=True)
 
         self.columnconfigure(1, weight=1)
@@ -182,29 +195,9 @@ class AttendanceFrame(Frame):
         self.rowconfigure(4, weight=1)
         self.rowconfigure(6, pad=7)
 
-        # lblMonth = Label(self, text="Měsíc:")
-        # lblMonth.grid(row=1, column=0, sticky=W, pady=4, padx=5)
-
-        user_years: list = self.get_update_mesic_cb
+        user_years: list = self.get_update_month_cb
 
         print(user_years)
-        # user_years = list()
-        #
-        #
-        # print("userId: " + str(self.user_id))
-        #
-        # temp_year = db.get_presence_groupby_year_by_id(self.__conn, self.user_id)
-        # print("temp: " + str(len(temp_year)))
-        # for x in temp_year:
-        #     print(x)
-        #     user_years.append(x)
-        #
-        # if(len(temp_year) == 0):
-        #     user_years.append("Žádný zápis")
-
-        # for x in user_years:
-        #     print("---")
-        #     print(x)
 
         self.__cb_month = Combobox(self, state="readonly", values=(
             "Leden", "Únor", "Březen", "Duben", "Květen", "Červen", "Červenec", "Srpen", "Září", "Říjen", "Listopad",
@@ -213,21 +206,16 @@ class AttendanceFrame(Frame):
         self.__cb_month.bind('<<ComboboxSelected>>', self.cb_month_update)
         self.__cb_month.grid(row=1, column=0, pady=2, padx=5, sticky=W)
 
-        # lblYear = Label(self, text="Rok:")
-        # lblYear.grid(row=2, column=0, sticky=W, pady=4, padx=5)
-
         self.__cb_year["values"] = user_years
         self.__cb_year.set(user_years[0])
         self.__cb_year.bind('<<ComboboxSelected>>', self.cb_year_update)
         self.__cb_year.grid(row=2, column=0, pady=2, padx=5, sticky=W)
 
-        # 13.04.2021 :: 17:43 - 11:34
         lb_format = Label(self, text="datum :: příchod - odchod > doba", font=('Courier New', 12))
-        # lb_format = Label(self, text="DD.MM.YYYY :: HH:MM - HH:MM >", font=('Courier New', 12))
         lb_format.grid(row=3, column=0, sticky=W, pady=4, padx=5)
 
         self.__lb_data.grid(row=4, column=0, columnspan=4, rowspan=1,
-                         padx=5, sticky=E + W + S + N)
+                            padx=5, sticky=E + W + S + N)
 
         lb_user = Label(self, text="Přihlášen: " + self.user_log_in)
         lb_user.grid(row=1, column=2, sticky=W, pady=4)
@@ -237,9 +225,6 @@ class AttendanceFrame(Frame):
 
         lb_hire = Label(self, text="Nástup: " + self.hire_date)
         lb_hire.grid(row=2, column=2, sticky=W, pady=4)
-
-        # lblOdchozeno = Label(self, text="odchozeno", font=('Courier New', 12))
-        # lblOdchozeno.grid(row=3, column=2, sticky=W, pady=4, padx=5)
 
         btn_log_out = Button(self, text="Clear", command=self.clear)
         btn_log_out.grid(row=2, column=3, pady=4, sticky=E, padx="4")
@@ -256,11 +241,9 @@ class AttendanceFrame(Frame):
 
         rb_entry = Radiobutton(gb_entry, text="Příchod", variable=self.var, value=0)
         rb_entry.grid(row=1, column=1, sticky=W, pady=2, padx=5)
-        # t1.pack()
 
         rb_exit = Radiobutton(gb_entry, text="Odchod", variable=self.var, value=1)
         rb_exit.grid(row=1, column=2, sticky=W, pady=2, padx=5)
-        # t2.pack(side=LEFT)
 
         btn_entry = Button(gb_entry, text="Zapsat", command=self.btn_entry_event)
         btn_entry.grid(row=1, column=3, sticky=W, pady=2, padx=5)

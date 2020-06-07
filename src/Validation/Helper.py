@@ -34,7 +34,6 @@ class Validation:
             date (str): date in (yyyy-mm-dd) format
         Returns:
             str: Date in (dd.mm.yyy) format
-
         """
         temp_date = date.split("-")
         new_date = temp_date[2] + "." + temp_date[1] + "." + temp_date[0]
@@ -95,6 +94,4 @@ class Validation:
         """
         m: str = str('{:02d}:{:02d}'.format(*divmod(minutes, 60)))  # Minutes to hh:mm
         final_time: str = str(int(hours) + int(m.split(":")[0])) + ":" + m.split(":")[1]
-        # final_h: int = int(hours) + int(m.split(":")[0])  # Hours + hours from m
-        # final: str = str(final_h) + ":" + str(int(m.split(":")[1]))
         return final_time

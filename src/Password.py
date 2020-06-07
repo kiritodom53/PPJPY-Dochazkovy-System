@@ -1,7 +1,5 @@
-from tkinter import Tk, Text, BOTH, W, N, E, S, LEFT, END, Listbox, BooleanVar, Checkbutton, LabelFrame, Radiobutton, \
-    IntVar, Entry, Toplevel, font, messagebox
-from tkinter.ttk import Frame, Button, Label, Style, Combobox
-from tkcalendar import Calendar, DateEntry
+from tkinter import BooleanVar, Entry, messagebox
+from tkinter.ttk import Frame, Button, Label
 import src.Database as db
 
 
@@ -22,6 +20,8 @@ class PassFrame(Frame):
         self.__init_ui()
 
     def change_pass(self):
+        """Change user password
+        """
         print("reg")
         print(self.__old_password_box.get())
         print(self.__new_password_box.get())
@@ -50,44 +50,29 @@ class PassFrame(Frame):
             messagebox.showwarning("Chyba hesla!", "Hesla nesmí být prázdné!")
 
     def __init_ui(self):
-        lb_popis = Label(self.root, text="Změna hesla:")
-        lb_popis.grid(row=0, column=1, pady=5)
+        """Create graphic interface
+        """
+        lb_description = Label(self.root, text="Změna hesla:")
+        lb_description.grid(row=0, column=1, pady=5)
 
         lb_old_pass = Label(self.root, text="Staré heslo:")
-        # self.username.place(relx=0.285, rely=0.298, height=20, width=60)
         lb_old_pass.grid(row=1, column=2, pady=5)
 
         lb_new_pass = Label(self.root, text="Nové heslo:")
-        # self.password.place(relx=0.285, rely=0.468, height=20, width=60)
         lb_new_pass.grid(row=2, column=2, pady=5)
 
         lb_new_pass_again = Label(self.root, text="Heslo znova:")
-        # self.firstName.place(relx=0.285, rely=0.638, height=20, width=60)
         lb_new_pass_again.grid(row=3, column=2, pady=5)
-
-        # Creating Buttons
 
         self.__btn_hire = Button(self.root, text="Změnit heslo!", command=self.change_pass)
         self.__btn_hire.grid(row=4, column=2, columnspan=2, pady=5)
-        # self.__btn_hire(relx=0.440, rely=0.638, height=30, width=60)
-        # self.__btn_hire.configure(command=self.login_user)
-        #
-        # self.login_completed = IntVar()
-        #
-        # self.exit_button = Button(self.root, text="Exit")  # , command=master.quit)
-        # self.exit_button.place(relx=0.614, rely=0.638, height=30, width=60)
-        # self.exit_button.configure(command=self.exit_login)
-
-        # Creating entry boxes
 
         self.__old_password_box = Entry(self.root)
-        # self.username_box.place(relx=0.440, rely=0.298, height=20, relwidth=0.35)
         self.__old_password_box.grid(row=1, column=3)
         self.__old_password_box.configure(show="*")
         self.__old_password_box.configure(background="white")
 
         self.__new_password_box = Entry(self.root)
-        # self.password_box.place(relx=0.440, rely=0.468, height=20, relwidth=0.35)
         self.__new_password_box.grid(row=2, column=3)
         self.__new_password_box.configure(show="*")
         self.__new_password_box.configure(background="white")

@@ -17,6 +17,11 @@ def main():
 
 
 def __insert_presence(conn, data):
+    """Insert a new presence
+    Args:
+        conn: connection object
+        data: presence data
+    """
     for item in data:
         print(item)
         presence = (item['id'], item['timeIn'], item['timeOut'], item['date'], item['userID'])
@@ -24,6 +29,11 @@ def __insert_presence(conn, data):
 
 
 def __update_presence(conn, data):
+    """Update a presence
+    Args:
+        conn: connection object
+        data: presence data
+    """
     for item in data:
         print(item)
         pr2 = (item['timeIn'], item['timeOut'], item['userId'], item['id'])
@@ -31,6 +41,13 @@ def __update_presence(conn, data):
 
 
 def __read_json(path):
+    """Read json file
+    Args:
+        path: file path
+
+    Returns:
+        json data
+    """
     with open(path) as json_file:
         data = json.load(json_file)
         return data

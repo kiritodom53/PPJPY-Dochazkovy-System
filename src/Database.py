@@ -3,29 +3,37 @@ from sqlite3 import Error
 import src.Validation.Helper as helper
 import locale
 import os
-from datetime import datetime
 from pathlib import Path
 
-# conn = None
-# db_file = r"C:\Users\dom53\Documents\_workspace\____new_project_here\_python-project\DochazkovySystem\_files\dochazkadb.db"
-# db_file = r"Y:\_workspace\dochazkovysystemv2\src\_files\dochazkadb2.db"
-# db_file = os.path.dirname(os.path.abspath(__file__)) + "\\_files\\dochazkadb2.db"
 db_file = os.getcwd() + "\\dochazkadb2.db"
 
 
-def create_database():
+def create_database() -> None:
+    """Create database file
+    """
     print(db_file)
     print(os.getcwd())
     Path(db_file).touch()
-    # sqlite3.connect(db_file)
 
 
 def check_database() -> bool:
+    """Checks if database exist or not
+    Returns:
+        bool: True if the database exist otherwise False
+    """
     print("checking database")
     return os.path.exists(db_file)
 
 
 def check_tables(conn: sqlite3.Connection, table: str) -> bool:
+    """Checks if table is exist
+    Args:
+        conn: connection object
+        table: table name
+
+    Returns:
+        bool: True if the database exist otherwise False
+    """
     print("checking table " + table)
     # query = "SELECT name FROM sqlite_master WHERE type='table' AND name='{table_name}';"
 
@@ -39,18 +47,28 @@ def check_tables(conn: sqlite3.Connection, table: str) -> bool:
 
 
 def check_table_data(conn: sqlite3.Connection, table: str) -> bool:
+    """Checks if table data exist
+    Args:
+        conn: connection object
+        table: table name
+
+    Returns:
+        bool: True if the data is greater than zero otherwise False
+    """
     cur = conn.cursor()
     cur.execute("SELECT count(*) FROM " + table)
 
     row = cur.fetchall()
     print("checking data from " + table + ": " + str(row[0][0]))
-    if (int(row[0][0]) > 0):
+    if int(row[0][0]) > 0:
         return True
     return False
 
 
 def create_tables():
-    userTable = """ CREATE TABLE IF NOT EXISTS users (
+    """Creating default tables if not exists
+    """
+    user_table = """ CREATE TABLE IF NOT EXISTS users (
                                                 userId INTEGER PRIMARY KEY not null,
                                                 username VARCHAR(255) not null,
                                                 password VARCHAR(255) not null,
@@ -61,7 +79,7 @@ def create_tables():
                                                 isEmployer BOOLEAN NOT NULL DEFAULT 0
                                             ); """
 
-    presenceTable = """ CREATE TABLE IF NOT EXISTS presence (
+    presence_table = """ CREATE TABLE IF NOT EXISTS presence (
                                                 id INTEGER PRIMARY KEY not null,
                                                 timeIn VARCHAR(5) null,
                                                 timeOut VARCHAR(5) null,
@@ -73,8 +91,8 @@ def create_tables():
     conn = create_connection()
     if conn is not None:
         # create projects table
-        create_table(conn, userTable)
-        create_table(conn, presenceTable)
+        create_table(conn, user_table)
+        create_table(conn, presence_table)
 
         seed_data(conn)
 
@@ -84,86 +102,40 @@ def create_tables():
 
 def main():
     pass
-    # conn = None
-    # try:
-    #     conn = sqlite3.connect(db_file)
-    #     print(sqlite3.version)
-    # except Error as e:
-    #     print(e)
-    # finally:
-    #     if conn:
-    #         conn.close()
-
-    # userTable = """ CREATE TABLE IF NOT EXISTS users (
-    #                                         userId INTEGER PRIMARY KEY not null,
-    #                                         username VARCHAR(255) not null,
-    #                                         password VARCHAR(255) not null,
-    #                                         firstName VARCHAR(255) not null,
-    #                                         surname VARCHAR(255) not null,
-    #                                         hireDate VARCHAR(10) not null,
-    #                                         wagePerHour INT NOT NULL DEFAULT 100,
-    #                                         isEmployer BOOLEAN NOT NULL DEFAULT 0
-    #                                     ); """
-    #
-    # presenceTable = """ CREATE TABLE IF NOT EXISTS presence (
-    #                                         id INTEGER PRIMARY KEY not null,
-    #                                         timeIn VARCHAR(5) null,
-    #                                         timeOut VARCHAR(5) null,
-    #                                         date VARCHAR(10) not null,
-    #                                         userId int not null,
-    #                                         FOREIGN KEY (userId) REFERENCES users(userId)
-    #                                     ); """
-    #
-    # conn = create_connection()
-    # if conn is not None:
-    #     # create projects table
-    #     create_table(conn, userTable)
-    #     create_table(conn, presenceTable)
-    #
-    #     # Insert data
-    #     # user1 = ('test', 'test', 'David', 'Mašek', '20.05.2020', 1)
-    #     # create_user(conn, user1)
-    #     # create_user(conn, user1)
-    #     # create_user(conn, user1)
-    #     # create_user(conn, user1)
-    #     # create_user(conn, user1)
-    #
-    #     # Update data
-    #     #update_user(conn, (120, 1))
-    #
-    #     # Delete data
-    #     #delete_user(conn, 2)
-    #
-    #     # Select data by id
-    #     #select_user_by_id(conn, 1)
-    #     # select_user_by_credentials(conn, 'dom53', 'admin')
-    #
-    #     seed_data(conn)
-    #
-    # else:
-    #     print("Error! cannot create the database connection.")
 
 
-def seed_data(connection):
-    if connection is not None:
-        create_user(connection, ('dom53', 'admin', 'Dominik', 'Mandinec', '17.01.2019'))
-        create_user(connection, ('admin', 'admin', 'Cristen', 'Klausen', '17.01.2019'))
-        create_user(connection, ('atallis2', 'admin', 'Alicea', 'Tallis', '20.01.2019'))
-        create_user(connection, ('mserris3', 'admin', 'Merwin', 'Serris', '07.01.2019'))
-        create_user(connection, ('rfalkous4', 'admin', 'Ruddie', 'Falkous', '01.01.2019'))
-        create_user(connection, ('vmaccaghan5', 'admin', 'Violante', 'MacCaghan', '05.01.2019'))
-        create_user(connection, ('blamping6', 'admin', 'Brendin', 'Lamping', '13.01.2019'))
-        create_user(connection, ('myearsley7', 'admin', 'Mervin', 'Yearsley', '26.01.2019'))
-        create_user(connection, ('dtoffolini8', 'admin', 'Darcee', 'Toffolini', '20.01.2019'))
-        create_user(connection, ('jfairnington9', 'admin', 'Jaymie', 'Fairnington', '11.01.2019'))
-        create_user(connection, ('ecrannella', 'admin', 'Eilis', 'Crannell', '27.01.2019'))
-        create_user(connection, ('gkennaghb', 'admin', 'Granger', 'Kennagh', '14.01.2019'))
-        create_user(connection, ('ngirogettic', 'admin', 'Nell', 'Girogetti', '04.01.2019'))
-        create_user(connection, ('bcoand', 'admin', 'Bethany', 'Coan', '24.01.2019'))
-        create_user(connection, ('pjewise', 'admin', 'Paddy', 'Jewis', '04.01.2019'))
+def seed_data(conn):
+    """Seed data to the database
+    Args:
+        conn: connection object
+    """
+    if conn is not None:
+        create_user(conn, ('dom53', 'admin', 'Dominik', 'Mandinec', '17.01.2019'))
+        create_user(conn, ('admin', 'admin', 'Cristen', 'Klausen', '17.01.2019'))
+        create_user(conn, ('atallis2', 'admin', 'Alicea', 'Tallis', '20.01.2019'))
+        create_user(conn, ('mserris3', 'admin', 'Merwin', 'Serris', '07.01.2019'))
+        create_user(conn, ('rfalkous4', 'admin', 'Ruddie', 'Falkous', '01.01.2019'))
+        create_user(conn, ('vmaccaghan5', 'admin', 'Violante', 'MacCaghan', '05.01.2019'))
+        create_user(conn, ('blamping6', 'admin', 'Brendin', 'Lamping', '13.01.2019'))
+        create_user(conn, ('myearsley7', 'admin', 'Mervin', 'Yearsley', '26.01.2019'))
+        create_user(conn, ('dtoffolini8', 'admin', 'Darcee', 'Toffolini', '20.01.2019'))
+        create_user(conn, ('jfairnington9', 'admin', 'Jaymie', 'Fairnington', '11.01.2019'))
+        create_user(conn, ('ecrannella', 'admin', 'Eilis', 'Crannell', '27.01.2019'))
+        create_user(conn, ('gkennaghb', 'admin', 'Granger', 'Kennagh', '14.01.2019'))
+        create_user(conn, ('ngirogettic', 'admin', 'Nell', 'Girogetti', '04.01.2019'))
+        create_user(conn, ('bcoand', 'admin', 'Bethany', 'Coan', '24.01.2019'))
+        create_user(conn, ('pjewise', 'admin', 'Paddy', 'Jewis', '04.01.2019'))
 
 
 def get_presence_group_by_year_by_id(conn: sqlite3.Connection, user_id: int) -> list:
+    """Return presence year by id
+    Args:
+        conn: connection object
+        user_id: user id
+
+    Returns:
+        list: years from presence by id
+    """
     cur = conn.cursor()
     cur.execute("SELECT substr(date,1,4) FROM presence WHERE userId=? group by substr(date,1,4)", (user_id,))
 
@@ -177,6 +149,14 @@ def get_presence_group_by_year_by_id(conn: sqlite3.Connection, user_id: int) -> 
 
 
 def select_user_by_id(conn: sqlite3.Connection, user_id: int):
+    """Return user by id
+    Args:
+        conn:
+        user_id:
+
+    Returns:
+        user by id
+    """
     cur = conn.cursor()
     cur.execute("SELECT * FROM users WHERE userId=?", (user_id,))
 
@@ -186,6 +166,14 @@ def select_user_by_id(conn: sqlite3.Connection, user_id: int):
 
 
 def user_exist(conn: sqlite3.Connection, username: str) -> bool:
+    """Checks if user exist
+    Args:
+        conn: connection object
+        username: username
+
+    Returns:
+        bool: True if user exist otherwise False
+    """
     print("db user")
     cur = conn.cursor()
     cur.execute("SELECT count(*) FROM users WHERE username=?", (username,))
@@ -197,6 +185,14 @@ def user_exist(conn: sqlite3.Connection, username: str) -> bool:
 
 
 def check_pass(conn: sqlite3.Connection, password: str) -> bool:
+    """Checks if the password matches
+    Args:
+        conn: connection object
+        password: user password
+
+    Returns:
+        bool: True if the password matches otherwise False
+    """
     print("db user")
     cur = conn.cursor()
     cur.execute("SELECT count(*) FROM users WHERE password=?", (password,))
@@ -208,6 +204,15 @@ def check_pass(conn: sqlite3.Connection, password: str) -> bool:
 
 
 def exist_time_in(conn: sqlite3.Connection, user_id: int, date: str) -> bool:
+    """Checks if entry already exist in database
+    Args:
+        conn: connection object
+        user_id: user id
+        date: date of arrival
+
+    Returns:
+        bool: True if entry already exist otherwise False
+    """
     cur = conn.cursor()
     cur.execute("SELECT count(*) FROM presence WHERE userId=? AND date=?", (user_id, date,))
 
@@ -215,10 +220,18 @@ def exist_time_in(conn: sqlite3.Connection, user_id: int, date: str) -> bool:
     if row[0][0] == 0:
         return False
     return True
-    # return row
 
 
-def exist_timeOut(conn: sqlite3.Connection, user_id: int, date: str) -> bool:
+def exist_time_out(conn: sqlite3.Connection, user_id: int, date: str) -> bool:
+    """Checks if departure already exist in database
+    Args:
+        conn: connection object
+        user_id: user id
+        date: date of departure
+
+    Returns:
+        bool: True if entry already exist otherwise False
+    """
     cur = conn.cursor()
     cur.execute("SELECT count(*) FROM presence WHERE userId=? AND date=? AND timeOut IS NULL", (user_id, date,))
 
@@ -229,17 +242,27 @@ def exist_timeOut(conn: sqlite3.Connection, user_id: int, date: str) -> bool:
     return True
 
 
-def select_presence_by_user_id(conn: sqlite3.Connection, user_id: int, date: str, month: str) -> list:
+def select_presence_by_user_id(conn: sqlite3.Connection, user_id: int, year: str, month: str) -> list:
+    """Return work presences by user id
+    Args:
+        conn: connection object
+        user_id: user id
+        year: year
+        month: month
+
+    Returns:
+        list: List of user work presences
+    """
     cur = conn.cursor()
     print("iid: " + str(id))
-    print("ddate: " + date)
+    print("ddate: " + year)
     print("mmonth: " + month)
     convert_month = helper.Validation.month_to_number(month)
     print(convert_month)
     # mesic = date + '-' + convert_month + '%'
     # print(mesic)
     cur.execute("SELECT * FROM presence WHERE userId= ? AND date LIKE ? ORDER BY date",
-                (user_id, date + '-' + convert_month + '%',))
+                (user_id, year + '-' + convert_month + '%',))
 
     rows = cur.fetchall()
     # print(row)
@@ -247,6 +270,16 @@ def select_presence_by_user_id(conn: sqlite3.Connection, user_id: int, date: str
 
 
 def select_user_day_count(conn: sqlite3.Connection, user_id: int, date: str, month: str) -> int:
+    """Return number of working days per month
+    Args:
+        conn: connection object
+        user_id: user id
+        date: date
+        month: month
+
+    Returns:
+        int: Number of working days
+    """
     cur = conn.cursor()
     convert_month = helper.Validation.month_to_number(month)
     # print(convert_month)
@@ -260,6 +293,16 @@ def select_user_day_count(conn: sqlite3.Connection, user_id: int, date: str, mon
 
 
 def select_user_time(conn: sqlite3.Connection, user_id: int, date: str, month: str) -> str:
+    """Return time of working days per month
+    Args:
+        conn:
+        user_id:
+        date:
+        month:
+
+    Returns:
+        str: Time of working days
+    """
     cur = conn.cursor()
 
     h: int = 0
@@ -293,6 +336,16 @@ def select_user_time(conn: sqlite3.Connection, user_id: int, date: str, month: s
 
 
 def select_user_wage(conn: sqlite3.Connection, user_id: int, date: str, month: str) -> str:
+    """Return user wage per month by user id
+    Args:
+        conn: connection object
+        user_id: user id
+        date: date
+        month: month
+
+    Returns:
+        str: user wage per month
+    """
     time = select_user_time(conn, user_id, date, month)
 
     cur = conn.cursor()
@@ -315,6 +368,15 @@ def select_user_wage(conn: sqlite3.Connection, user_id: int, date: str, month: s
 
 
 def select_user_by_credentials(conn: sqlite3.Connection, username: str, password: str) -> list:
+    """Return user by user credentials
+    Args:
+        conn: connection object
+        username: user username
+        password: user password
+
+    Returns:
+        list: user
+    """
     cur = conn.cursor()
     cur.execute("SELECT * FROM users WHERE username=? and password=?", (username, password))
 
@@ -326,6 +388,11 @@ def select_user_by_credentials(conn: sqlite3.Connection, username: str, password
 
 
 def delete_user(conn: sqlite3.Connection, user_id: int):
+    """Delete user by id
+    Args:
+        conn: connection object
+        user_id: user id
+    """
     sql = 'DELETE FROM users WHERE userId=?'
     cur = conn.cursor()
     cur.execute(sql, (user_id,))
@@ -333,11 +400,10 @@ def delete_user(conn: sqlite3.Connection, user_id: int):
 
 
 def update_user(conn: sqlite3.Connection, task: tuple):
-    """
-    update priority, begin_date, and end date of a task
-    :param conn:
-    :param task:
-    :return: project id
+    """Update priority, begin_date, and end date of a task
+    Args:
+        conn: connection object
+        task: data
     """
     sql = ''' UPDATE users
               SET wagePerHour = ?
@@ -348,11 +414,10 @@ def update_user(conn: sqlite3.Connection, task: tuple):
 
 
 def update_presence(conn: sqlite3.Connection, task: tuple):
-    """
-    update priority, begin_date, and end date of a task
-    :param conn:
-    :param task:
-    :return: project id
+    """Update presence
+    Args:
+        conn: connection object
+        task: data
     """
     sql = ''' UPDATE presence
               SET timeIn = ?, timeOut = ?
@@ -363,11 +428,10 @@ def update_presence(conn: sqlite3.Connection, task: tuple):
 
 
 def create_user(conn: sqlite3.Connection, project: tuple):
-    """
-    Create a new project into the projects table
-    :param conn:
-    :param project:
-    :return: project id
+    """Create a new user
+    Args:
+        conn: connection object
+        project: user data
     """
     sql = ''' INSERT INTO users(username,password,firstName,surname,hireDate)
               VALUES(?,?,?,?,?) '''
@@ -378,6 +442,11 @@ def create_user(conn: sqlite3.Connection, project: tuple):
 
 
 def hire_user(conn: sqlite3.Connection, project: tuple):
+    """Hire a new user
+    Args:
+        conn: connection object
+        project: user data
+    """
     sql = ''' INSERT INTO users(username,password,firstName,surname,hireDate,wagePerHour)
               VALUES(?,?,?,?,?,?) '''
     cur = conn.cursor()
@@ -387,6 +456,11 @@ def hire_user(conn: sqlite3.Connection, project: tuple):
 
 
 def create_presence(conn: sqlite3.Connection, project: tuple):
+    """Create a new presence
+    Args:
+        conn: connection object
+        project: presence data
+    """
     sql = ''' INSERT INTO presence(id,timeIn,timeOut,date,userId)
               VALUES(?,?,?,?,?) '''
     cur = conn.cursor()
@@ -395,6 +469,11 @@ def create_presence(conn: sqlite3.Connection, project: tuple):
 
 
 def create_presence_in(conn: sqlite3.Connection, project: tuple):
+    """Create a new presence (entry)
+    Args:
+        conn: connection object
+        project: presence data
+    """
     sql = ''' INSERT INTO presence(timeIn,date,userId)
               VALUES(?,?,?) '''
     cur = conn.cursor()
@@ -403,6 +482,11 @@ def create_presence_in(conn: sqlite3.Connection, project: tuple):
 
 
 def create_presence_out(conn: sqlite3.Connection, project: tuple):
+    """Update presence (exit)
+    Args:
+        conn: connection object
+        project: presence data
+    """
     sql = ''' UPDATE presence
                   SET timeOut = ?
                   WHERE date = ? AND userId = ?'''
@@ -412,6 +496,11 @@ def create_presence_out(conn: sqlite3.Connection, project: tuple):
 
 
 def change_password(conn: sqlite3.Connection, project: tuple):
+    """Change user password
+    Args:
+        conn: connection object
+        project: user data
+    """
     print("change type")
     print(type(project))
     sql = ''' UPDATE users
@@ -423,10 +512,10 @@ def change_password(conn: sqlite3.Connection, project: tuple):
 
 
 def create_table(conn: sqlite3.Connection, create_table_sql):
-    """ create a table from the create_table_sql statement
-    :param conn: Connection object
-    :param create_table_sql: a CREATE TABLE statement
-    :return:
+    """Create a table from the create_table_sql statement
+    Args:
+        conn: connection object
+        create_table_sql: a CREATE TABLE statement
     """
     try:
         c = conn.cursor()
@@ -436,11 +525,9 @@ def create_table(conn: sqlite3.Connection, create_table_sql):
 
 
 def create_connection():
-    """Create a database connection to the SQLite database
-        specified by db_file
-
-    Returns: Open connection to the database file or None
-
+    """Create a database connection to the SQLite database specified by db_file
+    Returns:
+        sqlite3.Connection: Open connection to the database file or None
     """
     conn = None
     try:
@@ -449,7 +536,6 @@ def create_connection():
     except Error as e:
         print(e)
         # raise Error
-
     return conn
 
 
