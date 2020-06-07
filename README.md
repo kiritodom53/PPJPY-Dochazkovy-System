@@ -41,8 +41,7 @@ username:heslo
 
 ```
 dochazkovysystemv2
-├── build (build files)
-├── dist (final build)
+├── exe_file
 │   └── __init__.exe (startup file)
 ├── src
 │   ├── __old (folder with old files)
@@ -60,9 +59,6 @@ dochazkovysystemv2
 │   ├── Login.py
 │   ├── Password.py
 │   └── presence.json (presence seed data)
-├── venv (library root)
-│   ├── Lib
-│   └── Scripts
 └── README.md
 ```
 
