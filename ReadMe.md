@@ -2,8 +2,6 @@
 
 ## ToDo:
 
-- Registrace
-- SeedData - Presence
 
 ### v0.1
 
@@ -12,7 +10,7 @@
 - [x] Vytvoření tabulek
 - [x] CRUD funkce
 - [x] SeedData - User
-- [ ] SeedData - Presence
+- [x] SeedData - Presence
 - [x] Přihlášení pomocí uživatelských údajů
 
 ##### Aplikace formulář
@@ -23,4 +21,12 @@
 
 - [x] Přihlašovací formulář
 - [x] Přihlášení podle účtu z DTB
+
+
+##### Ostatní
+
+- [x] Registrace
+- [x] Hash hesel
+- [x] Startup configurace
+- [x] Dokumentace kódu
 
