@@ -1,16 +1,23 @@
 from tkinter import Tk, Label, Button, Entry, IntVar, Checkbutton, messagebox
 import src.Database as db
+import src.Validation.Helper as helper
+
 
 class LoginPage:
+
+    user: str
+    user_id: int
+    hire: str
+    isEmployer: int
 
     def __init__(self, login=Tk()):  # This is my first change so i already initialize a Tk window inside the class
         """
         :type login: object
         """
-        self.user: str
-        self.user_id: int
-        self.hire: str
-        self.isEmployer: int
+        # self.user: str
+        # self.user_id: int
+        # self.hire: str
+        # self.isEmployer: int
         self.__login = login
         self.__login.protocol("WM_DELETE_WINDOW", self.__event_x)
         self.__login.title("Login - Docházkový systém MANDINEC 1.0")
@@ -73,16 +80,26 @@ class LoginPage:
         # AUTO DATA PRO TESTOVÁNÍ
         name = "dom53"
         password = "admin"
+        # password = helper.Validation.verify_password(provided_password=)
 
         conn = db.create_connection()
         # us = db.select_user_by_id(conn, 1)
         # row = db.select_user_by_id(conn, 1)[0]
-        row = db.select_user_by_credentials(conn, name, password)[0]
+        # row = db.select_user_by_credentials(conn, name, password)[0]
+        row: tuple
+        try:
+            row = db.select_user_by_credentials2(conn, name)[0]
+            print("row")
+            print(type(row))
+        except IndexError:
+            messagebox.showwarning("Login Failed - Access Denied", "Username or Password incorrect!")
+            raise ValueError("Wrong credentials! - Access denied")
 
-        print("name: " + name)
-        print("password: " + password)
-        print("row[1]: " + row[1])
-        print("row[2]: " + row[2])
+        # print("name: " + name)
+        # print("password: " + password)
+        # print("row[1]: " + row[1])
+        # print("row[2]: " + row[2])
+
         # global qq
         # global userId
         # global hire
@@ -91,30 +108,21 @@ class LoginPage:
         self.user_id = row[0]
         self.hire = row[5]
         self.isEmployer = row[7]
-        print("tady typy")
-        print(type(self.user))
-        print(type(self.user_id))
-        print(type(self.hire))
-        print(type(self.isEmployer))
-        print("isEmployer")
-        print(self.isEmployer)
+        # print("tady typy")
+        # print(type(self.user))
+        # print(type(self.user_id))
+        # print(type(self.hire))
+        # print(type(self.isEmployer))
+        # print("isEmployer")
+        # print(self.isEmployer)
+        # print(password)
+        # print(row[2])
 
-        # print ToDo: Hashovat heslo
-        # Potom zapnout
-        if name == row[1] and password == row[2]:
-
-            # Potom zapnout
-            # messagebox.showinfo("Login page", "Login successful!")
+        if name == row[1] and helper.Validation.verify_password(row[2], password):
+            messagebox.showinfo("Login page", "Login successful!")
             self.__login.destroy()  # Removes the toplevel window
-            # self.main_win.deiconify() #Unhides the root window
-            # self.login_completed == 1
-
-
-        # Potom zapnout
         else:
-            messagebox.showwarning("Login Failed - Acess Denied", "Username or Password incorrect!")
-
-        # return
+            messagebox.showwarning("Login Failed - Access Denied", "Username or Password incorrect!")
 
     @property
     def get_user_id(self) -> int:

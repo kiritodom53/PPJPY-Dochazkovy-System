@@ -109,22 +109,23 @@ def seed_data(conn):
     Args:
         conn: connection object
     """
+    password_hash = "d3457ad5e96aa2727685b91b25b2d01c07e0bc8a33a868bda1b06b226e94fa7391db845be9b890af6b7f8c64be3f27927d391b7e832ba250c6568b8344ca64a1aa80003bb55101e6f960733b5bfee49281e276a76b314d7b3775651c43304938"
     if conn is not None:
-        create_user(conn, ('dom53', 'admin', 'Dominik', 'Mandinec', '17.01.2019'))
-        create_user(conn, ('admin', 'admin', 'Cristen', 'Klausen', '17.01.2019'))
-        create_user(conn, ('atallis2', 'admin', 'Alicea', 'Tallis', '20.01.2019'))
-        create_user(conn, ('mserris3', 'admin', 'Merwin', 'Serris', '07.01.2019'))
-        create_user(conn, ('rfalkous4', 'admin', 'Ruddie', 'Falkous', '01.01.2019'))
-        create_user(conn, ('vmaccaghan5', 'admin', 'Violante', 'MacCaghan', '05.01.2019'))
-        create_user(conn, ('blamping6', 'admin', 'Brendin', 'Lamping', '13.01.2019'))
-        create_user(conn, ('myearsley7', 'admin', 'Mervin', 'Yearsley', '26.01.2019'))
-        create_user(conn, ('dtoffolini8', 'admin', 'Darcee', 'Toffolini', '20.01.2019'))
-        create_user(conn, ('jfairnington9', 'admin', 'Jaymie', 'Fairnington', '11.01.2019'))
-        create_user(conn, ('ecrannella', 'admin', 'Eilis', 'Crannell', '27.01.2019'))
-        create_user(conn, ('gkennaghb', 'admin', 'Granger', 'Kennagh', '14.01.2019'))
-        create_user(conn, ('ngirogettic', 'admin', 'Nell', 'Girogetti', '04.01.2019'))
-        create_user(conn, ('bcoand', 'admin', 'Bethany', 'Coan', '24.01.2019'))
-        create_user(conn, ('pjewise', 'admin', 'Paddy', 'Jewis', '04.01.2019'))
+        create_user(conn, ('dom53', password_hash, 'Dominik', 'Mandinec', '17.01.2019'))
+        create_user(conn, ('admin', password_hash, 'Cristen', 'Klausen', '17.01.2019'))
+        create_user(conn, ('atallis2', password_hash, 'Alicea', 'Tallis', '20.01.2019'))
+        create_user(conn, ('mserris3', password_hash, 'Merwin', 'Serris', '07.01.2019'))
+        create_user(conn, ('rfalkous4', password_hash, 'Ruddie', 'Falkous', '01.01.2019'))
+        create_user(conn, ('vmaccaghan5', password_hash, 'Violante', 'MacCaghan', '05.01.2019'))
+        create_user(conn, ('blamping6', password_hash, 'Brendin', 'Lamping', '13.01.2019'))
+        create_user(conn, ('myearsley7', password_hash, 'Mervin', 'Yearsley', '26.01.2019'))
+        create_user(conn, ('dtoffolini8', password_hash, 'Darcee', 'Toffolini', '20.01.2019'))
+        create_user(conn, ('jfairnington9', password_hash, 'Jaymie', 'Fairnington', '11.01.2019'))
+        create_user(conn, ('ecrannella', password_hash, 'Eilis', 'Crannell', '27.01.2019'))
+        create_user(conn, ('gkennaghb', password_hash, 'Granger', 'Kennagh', '14.01.2019'))
+        create_user(conn, ('ngirogettic', password_hash, 'Nell', 'Girogetti', '04.01.2019'))
+        create_user(conn, ('bcoand', password_hash, 'Bethany', 'Coan', '24.01.2019'))
+        create_user(conn, ('pjewise', password_hash, 'Paddy', 'Jewis', '04.01.2019'))
 
 
 def get_presence_group_by_year_by_id(conn: sqlite3.Connection, user_id: int) -> list:
@@ -379,6 +380,24 @@ def select_user_by_credentials(conn: sqlite3.Connection, username: str, password
     """
     cur = conn.cursor()
     cur.execute("SELECT * FROM users WHERE username=? and password=?", (username, password))
+
+    row = cur.fetchall()
+    print("login user is:")
+    print(type(row))
+    print(row)
+    return row
+
+def select_user_by_credentials2(conn: sqlite3.Connection, username: str) -> list:
+    """Return user by user credentials
+    Args:
+        conn: connection object
+        username: user username
+
+    Returns:
+        list: user
+    """
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM users WHERE username=?", (username,))
 
     row = cur.fetchall()
     print("login user is:")

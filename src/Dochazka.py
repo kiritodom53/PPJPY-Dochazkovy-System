@@ -202,12 +202,12 @@ class AttendanceFrame(Frame):
         self.__cb_month = Combobox(self, state="readonly", values=(
             "Leden", "Únor", "Březen", "Duben", "Květen", "Červen", "Červenec", "Srpen", "Září", "Říjen", "Listopad",
             "Prosinec"))
-        self.__cb_month.set("Leden")
+        self.__cb_month.set(helper.Validation.get_current_month())
         self.__cb_month.bind('<<ComboboxSelected>>', self.cb_month_update)
         self.__cb_month.grid(row=1, column=0, pady=2, padx=5, sticky=W)
 
         self.__cb_year["values"] = user_years
-        self.__cb_year.set(user_years[0])
+        self.__cb_year.set(user_years[len(user_years) - 1])
         self.__cb_year.bind('<<ComboboxSelected>>', self.cb_year_update)
         self.__cb_year.grid(row=2, column=0, pady=2, padx=5, sticky=W)
 
